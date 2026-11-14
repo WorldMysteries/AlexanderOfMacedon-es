@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Dónde reposa Alejandro? — El misterio de la tumba de Alejandro Magno</title>
+<meta name="description" content="Investigación interactiva: el viaje del cuerpo de Alejandro Magno desde Babilonia a Alejandría, los testimonios de los autores antiguos, un mapa de hipótesis sobre la ubicación de la tumba y una crónica de las búsquedas.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23090806'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='%23c9a55b' font-family='serif'%3EΣ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Manrope:wght@300;400;500;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{
+  --bg:#090806;--bg2:#100e0a;--bg3:#181511;
+  --gold:#c9a55b;--gold2:#e8cc84;--gold3:#7d6334;
+  --sand:#ebe1cb;--sand2:#cfc4aa;--muted:#948a76;
+  --line:rgba(235,225,203,.09);--line2:rgba(201,165,91,.35);
+  --red:#a1392a;--green:#7fb286;--blue:#7f9fd0;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',system-ui,-apple-system,sans-serif;
+  --caps:'Cinzel','Cormorant Garamond',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--sand);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-weight:300}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.055;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+::selection{background:var(--gold);color:var(--bg)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#2a251c;border:2px solid var(--bg)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.05}
+a{color:inherit}
+button{font-family:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,48px);position:relative}
+section{padding:clamp(80px,10vw,140px) 0;position:relative;scroll-margin-top:70px}
+.overline{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:14px;font-weight:500}
+.overline::before{content:'';width:40px;height:1px;background:var(--gold);flex:none}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,36px);align-items:start;margin-bottom:clamp(40px,6vw,72px)}
+.sec-head .num{font-family:var(--caps);font-size:clamp(3rem,6vw,5.4rem);line-height:.9;color:transparent;-webkit-text-stroke:1px var(--gold3);padding-top:6px}
+.sec-head h2{font-size:clamp(2.2rem,4.5vw,4rem);font-weight:300;letter-spacing:-.01em}
+.sec-head h2 em{color:var(--gold2);font-style:italic}
+.sec-head .lead{max-width:660px;color:var(--sand2);margin-top:16px;font-size:1.05rem;line-height:1.7}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:16px 28px;border:1px solid var(--gold);color:var(--gold2);text-decoration:none;font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;position:relative;overflow:hidden;transition:.4s;background:transparent;cursor:pointer}
+.btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-101%);transition:transform .45s cubic-bezier(.2,.7,.2,1);z-index:0}
+.btn span{position:relative;z-index:1}
+.btn:hover{color:var(--bg)}
+.btn:hover::before{transform:none}
+.btn.solid{background:var(--gold);color:var(--bg)}
+.btn.solid::before{background:var(--gold2)}
+.btn.ghost{border-color:var(--line2);color:var(--sand)}
+
+/* progress + nav */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold3),var(--gold2));z-index:60;transition:width .1s linear}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:20px clamp(20px,4vw,48px);transition:.4s}
+.nav.scrolled{background:rgba(9,8,6,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--sand)}
+.brand svg{width:36px;height:36px;color:var(--gold);transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.brand:hover svg{transform:rotate(90deg)}
+.brand b{font-family:var(--serif);font-size:1.3rem;font-weight:500;display:block;line-height:1}
+.brand small{display:block;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.nav ul{display:flex;gap:30px;list-style:none}
+.nav a.lnk{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sand2);text-decoration:none;position:relative;padding:6px 0;font-weight:500;transition:.3s}
+.nav a.lnk::after{content:'';position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:.3s}
+.nav a.lnk:hover::after,.nav a.lnk.active::after{width:100%}
+.nav a.lnk.active{color:var(--gold2)}
+.burger{display:none;width:44px;height:44px;border:1px solid var(--line2);background:transparent;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;z-index:52}
+.burger i{width:20px;height:1px;background:var(--gold);transition:.3s;display:block}
+.nav.open .burger i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.nav.open .burger i:nth-child(2){opacity:0}
+.nav.open .burger i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+@media (max-width:1000px){
+  .nav ul{position:fixed;inset:0;background:rgba(9,8,6,.97);flex-direction:column;align-items:center;justify-content:center;gap:30px;transform:translateY(-100%);transition:transform .5s cubic-bezier(.2,.7,.2,1);z-index:51}
+  .nav.open ul{transform:none}
+  .burger{display:flex}
+  .nav a.lnk{font-size:1.05rem;letter-spacing:.3em}
+}
+
+/* hero */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:150px 0 90px;overflow:hidden;isolation:isolate;background:var(--bg)}
+.hero-img{position:absolute;inset:0;background:url('https://images.pexels.com/photos/37844123/pexels-photo-37844123.jpeg?auto=compress&cs=tinysrgb&w=1800') center 40%/cover no-repeat;opacity:.28;filter:saturate(.35) contrast(1.1);mix-blend-mode:luminosity;z-index:-3;transform:scale(1.04)}
+.hero::before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(9,8,6,.55) 0%,rgba(9,8,6,.25) 40%,rgba(9,8,6,.9) 85%,var(--bg) 100%),radial-gradient(ellipse at 70% 40%,rgba(201,165,91,.14),transparent 55%)}
+#dust{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.sun-bg{position:absolute;right:-12vw;top:50%;transform:translateY(-50%);width:min(78vw,860px);height:min(78vw,860px);color:var(--gold);opacity:.07;z-index:-1;animation:spin 260s linear infinite}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+.side-label{position:absolute;left:clamp(14px,2vw,28px);top:50%;translate:0 -50%;writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--caps);font-size:.62rem;letter-spacing:.45em;color:var(--muted);z-index:2;white-space:nowrap}
+.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:end;position:relative;z-index:2}
+.hero h1{font-size:clamp(3.4rem,9.6vw,9.4rem);font-weight:300;line-height:.92;margin:26px 0 26px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--gold2);font-weight:300}
+.hero .lead{font-size:clamp(1rem,1.3vw,1.18rem);color:var(--sand2);max-width:580px;line-height:1.7}
+.hero .lead b{color:var(--sand);font-weight:500}
+.btns{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap}
+.hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.stat{background:rgba(9,8,6,.6);padding:26px 24px;backdrop-filter:blur(6px)}
+.stat .n{font-family:var(--serif);font-size:clamp(2.4rem,4vw,3.6rem);color:var(--gold2);line-height:1;font-weight:300}
+.stat .n sup{font-size:.45em;vertical-align:top;margin-left:2px}
+.stat .l{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px;font-weight:500}
+.scroll-cue{position:absolute;left:50%;bottom:26px;translate:-50% 0;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);z-index:2}
+.scroll-cue i{width:1px;height:54px;background:linear-gradient(var(--gold),transparent);position:relative;overflow:hidden;display:block}
+.scroll-cue i::after{content:'';position:absolute;left:0;top:-100%;width:100%;height:100%;background:var(--gold2);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{to{top:120%}}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr;gap:40px}.sun-bg{right:-40vw;width:120vw;height:120vw;opacity:.05}.side-label{display:none}.hero{padding-bottom:110px}}
+
+/* ticker */
+.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:15px 0;background:var(--bg2);position:relative;z-index:2}
+.ticker-track{display:flex;width:max-content;animation:ticker 48s linear infinite}
+.ticker span{font-family:var(--caps);font-size:.7rem;letter-spacing:.38em;color:var(--gold3);white-space:nowrap;padding-right:52px}
+.ticker span::after{content:'✦';margin-left:52px;color:var(--gold);opacity:.6}
+@keyframes ticker{to{transform:translateX(-50%)}}
+
+/* dossier */
+.dossier{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start}
+.file{border:1px solid var(--line2);padding:clamp(26px,4vw,44px);position:relative;background:linear-gradient(180deg,rgba(201,165,91,.06),transparent 60%)}
+.file::before{content:'';position:absolute;inset:8px;border:1px solid var(--line);pointer-events:none}
+.file .tag{font-family:var(--caps);font-size:.62rem;letter-spacing:.35em;color:var(--muted);margin-bottom:22px;display:block}
+.file dl{display:grid;grid-template-columns:max-content 1fr;gap:16px 28px}
+.file dt{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);padding-top:5px;font-weight:500}
+.file dd{color:var(--sand);border-bottom:1px dashed var(--line);padding-bottom:14px;font-size:.98rem}
+.file dd b{font-weight:500;color:var(--gold2)}
+.file dd.big{font-family:var(--serif);font-size:1.5rem;color:var(--gold2);border-bottom:0;padding-bottom:0}
+.file .days{font-family:var(--serif);font-size:clamp(2rem,3.4vw,2.8rem);color:var(--sand);line-height:1}
+.file .days small{display:block;font-family:var(--sans);font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.stamp{position:absolute;right:26px;top:-20px;transform:rotate(-7deg);border:3px double var(--red);color:#d26a5a;font-weight:600;letter-spacing:.32em;padding:10px 18px;font-size:.74rem;background:var(--bg);text-transform:uppercase;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.gloss{display:grid;gap:14px}
+.term{border-left:2px solid var(--gold3);padding:16px 20px;background:var(--bg2);transition:.3s}
+.term:hover{border-color:var(--gold2);background:var(--bg3)}
+.term b{font-family:var(--serif);font-size:1.4rem;font-weight:500;color:var(--gold2)}
+.term .gr{font-family:var(--serif);font-style:italic;color:var(--muted);margin-left:10px;font-size:1.05rem}
+.term p{font-size:.92rem;color:var(--sand2);margin-top:6px}
+@media (max-width:900px){.dossier{grid-template-columns:1fr}.file dl{grid-template-columns:1fr;gap:6px}.file dt{padding-top:10px}}
+
+/* journey */
+.journey{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,5vw,70px);align-items:start}
+.route-panel{position:sticky;top:88px;border:1px solid var(--line);background:radial-gradient(ellipse at 30% 20%,rgba(201,165,91,.08),transparent 60%),var(--bg2);padding:18px}
+.route-panel svg{width:100%;height:auto;display:block}
+.route-meta{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid var(--line);margin-top:14px;padding-top:14px;gap:14px}
+.route-meta .yr{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.3rem);color:var(--gold2);line-height:1;transition:.3s}
+.route-meta .loc{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);text-align:right;font-weight:500}
+.route-meta .loc b{display:block;color:var(--sand);font-weight:500;font-size:.8rem;letter-spacing:.14em;margin-top:4px}
+.node circle{fill:var(--bg);stroke:var(--gold);stroke-width:1.5;transition:.4s}
+.node text{fill:var(--sand2);font-family:var(--serif);font-size:15px;text-anchor:middle;transition:.4s}
+.node text.sub{fill:var(--muted);font-size:9.5px;font-family:var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.node.ghost-n circle{stroke:var(--muted);stroke-dasharray:2 2}
+.node.ghost-n text{fill:var(--muted)}
+.node.on circle{fill:var(--gold);stroke:var(--gold2)}
+.node.on text{fill:var(--gold2)}
+.route-base{fill:none;stroke:rgba(201,165,91,.3);stroke-width:1.5;stroke-dasharray:4 5}
+.route-fill{fill:none;stroke:var(--gold2);stroke-width:2;filter:url(#glow)}
+.ghost{fill:none;stroke:rgba(235,225,203,.2);stroke-dasharray:2 6;stroke-width:1.2}
+.sea-l{font-family:var(--caps);font-size:9px;letter-spacing:4px;fill:rgba(127,159,208,.5);text-anchor:middle}
+#marker .halo{fill:rgba(201,165,91,.2);animation:pulseS 2.2s ease-out infinite;transform-origin:center;transform-box:fill-box}
+#marker .core{fill:var(--gold2)}
+@keyframes pulseS{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.steps{position:relative;padding-left:40px}
+.steps::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(var(--gold3),var(--line) 80%,transparent)}
+.step{position:relative;padding:0 0 68px;transition:.4s;opacity:.55}
+.step.active{opacity:1}
+.step::before{content:'';position:absolute;left:-37px;top:8px;width:11px;height:11px;border-radius:50%;border:1px solid var(--gold);background:var(--bg);transition:.4s}
+.step.active::before{background:var(--gold);box-shadow:0 0 0 6px rgba(201,165,91,.18),0 0 20px rgba(201,165,91,.6)}
+.step .when{font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.step h3{font-size:clamp(1.6rem,2.4vw,2rem);font-weight:400;margin:10px 0 12px;transition:.3s}
+.step.active h3{color:var(--gold2)}
+.step p{color:var(--sand2);font-size:.98rem;line-height:1.7}
+.step .src{display:inline-block;margin-top:14px;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:6px 10px}
+@media (max-width:960px){
+  .journey{grid-template-columns:1fr}
+  .route-panel{top:62px;z-index:5;padding:10px;background:rgba(16,14,10,.96)}
+  .route-panel svg{max-height:36vh;margin:0 auto}
+  .route-meta{margin-top:8px;padding-top:8px}
+  .step{opacity:1}
+}
+
+/* witnesses */
+.quotes{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 0 30px;scrollbar-width:none}
+.quotes::-webkit-scrollbar{display:none}
+.quote{flex:0 0 min(520px,86vw);scroll-snap-align:start;border:1px solid var(--line);padding:34px;background:var(--bg2);position:relative;display:flex;flex-direction:column;gap:18px;transition:.4s}
+.quote:hover{border-color:var(--line2);transform:translateY(-4px)}
+.quote::before{content:'“';position:absolute;top:4px;right:26px;font-family:var(--serif);font-size:8rem;line-height:1;color:var(--gold);opacity:.13;pointer-events:none}
+.quote .who{display:flex;gap:14px;align-items:center}
+.quote .mono{width:48px;height:48px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;font-family:var(--serif);font-size:1.5rem;color:var(--gold2);flex:none}
+.quote .who b{font-weight:500;display:block;font-size:1rem}
+.quote .who span{font-size:.76rem;color:var(--muted);display:block}
+.quote blockquote{font-family:var(--serif);font-size:1.35rem;line-height:1.4;color:var(--sand);flex:1}
+.quote .ctx{font-size:.84rem;color:var(--sand2);border-top:1px solid var(--line);padding-top:14px;display:flex;gap:16px;justify-content:space-between;align-items:flex-start}
+.quote .yr{color:var(--gold);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;padding-top:4px;font-weight:600}
+.qnav{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:4px}
+.qnav .hint{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.qnav div{display:flex;gap:10px}
+.qnav button{width:48px;height:48px;border:1px solid var(--line2);background:transparent;color:var(--gold);cursor:pointer;font-size:1.1rem;transition:.3s}
+.qnav button:hover{background:var(--gold);color:var(--bg)}
+
+/* hypotheses */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.filters button{border:1px solid var(--line2);background:transparent;color:var(--sand2);padding:10px 16px;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.3s;font-weight:500}
+.filters button.on,.filters button:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:22px}
+.card{border:1px solid var(--line);background:var(--bg2);padding:30px;display:flex;flex-direction:column;gap:14px;position:relative;transition:.45s cubic-bezier(.2,.7,.2,1);cursor:pointer;overflow:hidden;text-align:left;color:inherit}
+.card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(201,165,91,.14),transparent 55%);opacity:0;transition:.4s;pointer-events:none}
+.card:hover,.card:focus-visible{border-color:var(--line2);transform:translateY(-5px);outline:none}
+.card:hover::after{opacity:1}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card .idx{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:4px}
+.badge{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;padding:5px 9px;border:1px solid currentColor;border-radius:2px;font-weight:500;white-space:nowrap}
+.badge.gold{color:var(--gold)}.badge.green{color:var(--green)}.badge.red{color:#d26a5a}.badge.blue{color:var(--blue)}.badge.grey{color:var(--muted)}
+.card h3{font-size:1.8rem;font-weight:400;line-height:1.1}
+.card .place{font-size:.78rem;color:var(--muted);letter-spacing:.04em;margin-top:-6px}
+.card p{color:var(--sand2);font-size:.94rem;flex:1;line-height:1.65}
+.meter{display:flex;flex-direction:column;gap:8px}
+.meter .row{display:flex;justify-content:space-between;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.meter .row b{color:var(--gold2);font-family:var(--caps);letter-spacing:.1em;font-size:.72rem}
+.meter .bar{height:3px;background:var(--line);position:relative;overflow:hidden}
+.meter .bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--gold3),var(--gold2));transition:width 1.3s cubic-bezier(.2,.7,.2,1)}
+.card .more{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px;margin-top:4px;font-weight:500}
+.card .more::after{content:'→';transition:.3s;font-size:1rem}
+.card:hover .more::after{transform:translateX(6px)}
+.card.hide{display:none}
+.note{margin-top:28px;font-size:.78rem;color:var(--muted);max-width:720px}
+
+/* map */
+.map-wrap{display:grid;grid-template-columns:340px 1fr;border:1px solid var(--line);background:var(--bg2)}
+.map-list{border-right:1px solid var(--line);overflow-y:auto;max-height:640px}
+.map-list h4{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);padding:20px 22px 8px;font-weight:500}
+.map-list button{display:flex;width:100%;text-align:left;gap:14px;align-items:center;background:none;border:0;border-bottom:1px solid var(--line);padding:14px 22px;color:var(--sand);cursor:pointer;transition:.25s}
+.map-list button:hover,.map-list button.on{background:rgba(201,165,91,.08)}
+.map-list .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);flex:none;box-shadow:0 0 10px rgba(201,165,91,.7)}
+.map-list .dot.rej{background:var(--red);box-shadow:none}
+.map-list .dot.route{background:var(--sand2);box-shadow:none;width:8px;height:8px}
+.map-list b{display:block;font-weight:500;font-size:.94rem;line-height:1.3}
+.map-list small{color:var(--muted);font-size:.74rem}
+.map-area{position:relative;min-height:640px}
+#map{scroll-margin-top:70px}
+#mapCanvas{height:640px;background:#0c0b09}
+.map-ctl{position:absolute;top:14px;right:14px;z-index:1001;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.map-ctl button{border:1px solid var(--line2);background:rgba(16,14,10,.9);color:var(--sand2);padding:8px 12px;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.3s;font-weight:500}
+.map-ctl button.on,.map-ctl button:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.map-fallback{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:40px;color:var(--muted);font-size:.9rem;background:radial-gradient(ellipse at center,rgba(201,165,91,.08),transparent 60%)}
+.leaflet-container{font-family:var(--sans);background:#0c0b09}
+.leaflet-popup-content-wrapper{background:#14120d;color:var(--sand);border:1px solid var(--line2);border-radius:2px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.leaflet-popup-tip{background:#14120d}
+.leaflet-popup-content{margin:16px 18px;font-size:.88rem;line-height:1.5}
+.leaflet-popup-close-button{color:var(--muted)!important}
+.pop b{font-family:var(--serif);font-size:1.3rem;font-weight:500;display:block;color:var(--gold2);line-height:1.1;margin-bottom:4px}
+.pop span{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.pop p{margin:8px 0 10px;color:var(--sand2)}
+.pop button{background:var(--gold);color:var(--bg);border:0;padding:8px 12px;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;font-weight:600}
+.pin-wrap{background:none;border:0}
+.pin{width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,165,91,.2),0 0 16px rgba(201,165,91,.9);position:relative}
+.pin::after{content:'';position:absolute;inset:-9px;border-radius:50%;border:1px solid rgba(201,165,91,.7);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.pin.rej{background:var(--red);box-shadow:0 0 0 4px rgba(161,57,42,.2)}
+.pin.rej::after{border-color:rgba(161,57,42,.5)}
+.pin.route{background:var(--sand2);width:10px;height:10px;box-shadow:0 0 0 3px rgba(235,225,203,.15);margin:2px}
+.pin.route::after{display:none}
+.leaflet-control-attribution{background:rgba(9,8,6,.7)!important;color:var(--muted)!important;font-size:10px}
+.leaflet-control-attribution a{color:var(--gold)!important}
+.leaflet-bar a{background:#14120d!important;color:var(--sand)!important;border-color:var(--line)!important}
+.leaflet-tooltip.lbl{background:transparent;border:0;box-shadow:none;color:var(--sand2);font-family:var(--caps);font-size:9px;letter-spacing:.2em;text-transform:uppercase}
+.leaflet-tooltip.lbl::before{display:none}
+@media (max-width:900px){.map-wrap{grid-template-columns:1fr}.map-list{max-height:250px;border-right:0;border-bottom:1px solid var(--line)}#mapCanvas,.map-area{height:470px;min-height:470px}}
+
+/* chronicle */
+.ledger{border-top:1px solid var(--line)}
+.row-l{display:grid;grid-template-columns:150px 1fr;gap:30px;padding:26px 10px;border-bottom:1px solid var(--line);align-items:start;transition:.3s}
+.row-l:hover{background:linear-gradient(90deg,rgba(201,165,91,.07),transparent)}
+.row-l .y{font-family:var(--caps);font-size:1.4rem;color:var(--gold2);line-height:1.1}
+.row-l .y small{display:block;font-family:var(--sans);font-size:.6rem;letter-spacing:.22em;color:var(--muted);margin-top:5px;text-transform:uppercase}
+.row-l h4{font-family:var(--serif);font-size:1.5rem;font-weight:500;margin-bottom:6px;line-height:1.15}
+.row-l p{color:var(--sand2);font-size:.95rem;max-width:780px;line-height:1.65}
+.row-l.now .y{color:var(--green)}
+.row-l.now h4{color:var(--green)}
+@media (max-width:640px){.row-l{grid-template-columns:1fr;gap:8px;padding:22px 0}}
+
+/* why */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.why{background:var(--bg);padding:36px 30px;transition:.3s;position:relative}
+.why:hover{background:var(--bg2)}
+.why svg{width:42px;height:42px;stroke:var(--gold);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;margin-bottom:20px}
+.why .k{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px;font-weight:600}
+.why h4{font-family:var(--serif);font-size:1.55rem;font-weight:500;margin-bottom:8px;line-height:1.15}
+.why p{color:var(--sand2);font-size:.92rem;line-height:1.65}
+
+/* verdict */
+.verdict{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+.panel{border:1px solid var(--line);background:var(--bg2);padding:clamp(26px,3.5vw,40px)}
+.panel h3{font-size:1.9rem;font-weight:400;margin-bottom:6px}
+.panel .sub{color:var(--muted);font-size:.82rem;margin-bottom:24px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:transparent;border:1px solid var(--line);color:var(--sand);padding:14px 16px;cursor:pointer;transition:.3s;margin-bottom:10px;position:relative;overflow:hidden;font-size:.94rem;line-height:1.35}
+.opt:hover{border-color:var(--line2);background:rgba(201,165,91,.05)}
+.opt>*{position:relative;z-index:1}
+.opt .k{font-family:var(--caps);color:var(--gold);font-size:.7rem;letter-spacing:.2em;flex:none;width:22px}
+.opt .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(201,165,91,.14);transition:width 1.1s cubic-bezier(.2,.7,.2,1);z-index:0}
+.opt .pct{margin-left:auto;font-family:var(--caps);color:var(--gold2);font-size:.82rem;flex:none}
+.opt.res{cursor:default}
+.opt.mine{border-color:var(--gold)}
+.opt.ok{border-color:var(--green);background:rgba(127,178,134,.12)}
+.opt.bad{border-color:#d26a5a;background:rgba(161,57,42,.12)}
+.opt:disabled{cursor:default;color:var(--sand);opacity:1}
+.small-link{background:none;border:0;color:var(--muted);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;margin-top:10px;text-decoration:underline;text-underline-offset:4px}
+.small-link:hover{color:var(--gold)}
+.quiz .meta{display:flex;justify-content:space-between;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-weight:500}
+.quiz .q{font-family:var(--serif);font-size:1.5rem;margin-bottom:18px;line-height:1.25;min-height:3.6rem}
+.quiz .expl{font-size:.86rem;color:var(--sand2);border-left:2px solid var(--gold3);padding:8px 14px;margin:14px 0;display:none}
+.quiz .expl.show{display:block}
+.result{text-align:center;padding:20px 0}
+.result .big{font-family:var(--serif);font-size:4.6rem;color:var(--gold2);line-height:1}
+.result .t{font-family:var(--serif);font-size:1.6rem;margin:10px 0 6px}
+.result p{color:var(--sand2);font-size:.92rem;max-width:380px;margin:0 auto 20px}
+@media (max-width:900px){.verdict{grid-template-columns:1fr}}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:70px 0 40px;background:var(--bg2);position:relative;z-index:2}
+.foot{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px}
+.foot h5{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:500}
+.foot ul{list-style:none}
+.foot li{color:var(--sand2);font-size:.84rem;margin-bottom:8px;line-height:1.45}
+.foot p{color:var(--muted);font-size:.86rem;line-height:1.65;max-width:420px}
+.foot .brand{margin-bottom:20px}
+.copy{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:50px;padding-top:24px;font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:900px){.foot{grid-template-columns:1fr}}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal .bd{position:absolute;inset:0;background:rgba(5,4,3,.84);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.modal .box{position:relative;width:min(880px,100%);max-height:90vh;overflow-y:auto;background:var(--bg2);border:1px solid var(--line2);padding:clamp(28px,4.5vw,56px);animation:up .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.modal .x{position:absolute;top:14px;right:14px;width:44px;height:44px;border:1px solid var(--line);background:var(--bg2);color:var(--sand);cursor:pointer;font-size:1.3rem;transition:.3s;z-index:2}
+.modal .x:hover{background:var(--gold);color:var(--bg)}
+.modal .top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.modal h3{font-size:clamp(2rem,4.2vw,3.2rem);font-weight:300;line-height:1.02;margin:14px 0 8px;letter-spacing:-.01em}
+.modal .place{color:var(--muted);font-size:.84rem;margin-bottom:24px}
+.modal .text{color:var(--sand2);font-size:1.02rem;line-height:1.75}
+.procon{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}
+.procon div{border:1px solid var(--line);padding:20px}
+.procon h4{font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;margin-bottom:12px;font-weight:500}
+.procon .pro h4{color:var(--green)}.procon .con h4{color:#d26a5a}
+.procon ul{list-style:none}
+.procon li{font-size:.9rem;color:var(--sand2);padding-left:18px;position:relative;margin-bottom:8px;line-height:1.5}
+.procon .pro li::before{content:'+';position:absolute;left:0;color:var(--green)}
+.procon .con li::before{content:'–';position:absolute;left:0;color:#d26a5a}
+.modal .meter{margin-top:26px}
+.modal .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+@media (max-width:640px){.procon{grid-template-columns:1fr}}
+
+/* reveal / misc */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*90ms)}
+.reveal.in{opacity:1;transform:none}
+.totop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border:1px solid var(--line2);background:rgba(9,8,6,.85);color:var(--gold);cursor:pointer;opacity:0;pointer-events:none;transition:.3s;z-index:40;font-size:1.1rem}
+.totop.show{opacity:1;pointer-events:auto}
+.totop:hover{background:var(--gold);color:var(--bg)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent);max-width:1240px;margin:0 auto}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<nav class="nav" id="nav">
+  <a href="#top" class="brand"><svg viewBox="-100 -100 200 200" class="sun-logo" aria-hidden="true"></svg><span><b>Σῆμα</b><small>La tumba de Alejandro</small></span></a>
+  <ul id="menu">
+    <li><a class="lnk" href="#dossier" data-spy="dossier">Expediente</a></li>
+    <li><a class="lnk" href="#journey" data-spy="journey">El viaje</a></li>
+    <li><a class="lnk" href="#witnesses" data-spy="witnesses">Testigos</a></li>
+    <li><a class="lnk" href="#hypotheses" data-spy="hypotheses">Hipótesis</a></li>
+    <li><a class="lnk" href="#map" data-spy="map">Mapa</a></li>
+    <li><a class="lnk" href="#chronicle" data-spy="chronicle">Crónica</a></li>
+    <li><a class="lnk" href="#verdict" data-spy="verdict">Veredicto</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Menú"><i></i><i></i><i></i></button>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-img" aria-hidden="true"></div>
+  <canvas id="dust" aria-hidden="true"></canvas>
+  <svg class="sun-bg" viewBox="-100 -100 200 200" aria-hidden="true"></svg>
+  <div class="side-label">ΣΗΜΑ ΑΛΕΞΑΝΔΡΟΥ · 323 A. C. — <span id="yrNow">2026</span> D. C. · QUAESTIO APERTA</div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="overline">Expediente n.º 323 · Caso sin resolver</div>
+      <h1>¿Dónde reposa<br><em>Alejandro</em>?</h1>
+      <p class="lead">El cuerpo del hombre que conquistó el mundo fue durante quinientos años la principal reliquia de Alejandría. Lo vieron <b>César, Augusto y Caracalla</b>. Y después desapareció: desde hace ya <b><span id="yearsInline">2348</span> años</b> nadie puede decir dónde yace el rey.</p>
+      <div class="btns">
+        <a href="#journey" class="btn solid"><span>Iniciar la investigación</span></a>
+        <a href="#map" class="btn ghost"><span>Mapa de hipótesis</span></a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="n"><span data-count="2348" id="yearsStat">0</span></div><div class="l">años de búsqueda</div></div>
+      <div class="stat"><div class="n"><span data-count="140">0</span><sup>+</sup></div><div class="l">expediciones oficiales</div></div>
+      <div class="stat"><div class="n"><span data-count="5">0</span></div><div class="l">soberanos romanos vieron el cuerpo</div></div>
+      <div class="stat"><div class="n"><span data-count="0">0</span></div><div class="l">restos encontrados</div></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Desliza</span><i></i></div>
+</header>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+<main>
+<!-- I. DOSSIER -->
+<section id="dossier">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="num">I</div>
+      <div>
+        <h2>Materiales del <em>caso</em></h2>
+        <p class="lead">Qué se sabe con certeza y dónde empieza el terreno de las conjeturas. En breve: el difunto, el cuerpo y el último lugar donde se le vio.</p>
+      </div>
+    </div>
+    <div class="dossier">
+      <div class="file reveal">
+        <div class="stamp">No encontrada</div>
+        <span class="tag">Ficha de identidad · Sujeto n.º 1</span>
+        <dl>
+          <dt>Nombre</dt><dd class="big">Alejandro III de Macedonia</dd>
+          <dt>Nacido</dt><dd>julio de 356 a. C., Pela, Macedonia</dd>
+          <dt>Muerto</dt><dd><b>10/11 de junio de 323 a. C.</b>, Babilonia, palacio de Nabucodonosor II. Edad: 32 años</dd>
+          <dt>Causa de la muerte</dt><dd>no establecida. Malaria, fiebre tifoidea, envenenamiento, fiebre del Nilo Occidental, síndrome de Guillain-Barré: solo hipótesis</dd>
+          <dt>Estado del cuerpo</dt><dd>embalsamado por maestros egipcios y caldeos. Según Curcio Rufo, permaneció seis días en el calor de Babilonia sin muestras de descomposición</dd>
+          <dt>Última inspección</dt><dd><b>215 d. C.</b>: el emperador Caracalla, Alejandría, mausoleo Soma</dd>
+          <dt>El rastro se pierde</dt><dd>hacia 390–400 d. C.</dd>
+          <dt>Intentos de encontrarla</dt><dd>más de 140 oficiales desde principios del siglo XIX</dd>
+          <dt>Estado</dt><dd><b>Paradero desconocido</b></dd>
+        </dl>
+        <div style="margin-top:30px" class="days"><span id="daysCounter">—</span><small>días sin respuesta desde la muerte</small></div>
+      </div>
+      <div class="gloss stagger">
+        <div class="term reveal"><b>Soma</b><span class="gr">Σῶμα «cuerpo» · Σῆμα «tumba»</span><p>Mausoleo de Alejandro en el centro de Alejandría, construido por Ptolomeo IV. Un recinto amurallado donde, alrededor del rey, reposaban también los propios Ptolomeos. Los autores antiguos lo llaman con ambas palabras.</p></div>
+        <div class="term reveal"><b>Brucheion</b><span class="gr">Βρουχεῖον</span><p>El barrio real de Alejandría: los palacios, el Mouseion, la Biblioteca y la Soma ocupaban hasta un tercio de la ciudad. Ardió bajo Aureliano en el año 272 y en parte se hundió bajo las aguas del puerto oriental.</p></div>
+        <div class="term reveal"><b>Diádocos</b><span class="gr">Διάδοχοι «sucesores»</span><p>Los generales que se repartieron el imperio. Para ellos, el cuerpo de Alejandro era un capital político: quien posee al rey es el heredero legítimo. Por eso en torno a la tumba se libró una verdadera guerra.</p></div>
+        <div class="term reveal"><b>Carro fúnebre</b><span class="gr">ἁρμάμαξα</span><p>Un templo de oro sobre ruedas que se construyó durante dos años en Babilonia. Su ruta y su secuestro son el arranque de toda la historia.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- II. JOURNEY -->
+<section id="journey">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="num">II</div>
+      <div>
+        <h2>El viaje del <em>cuerpo</em></h2>
+        <p class="lead">Desde el palacio de Babilonia hasta el mausoleo de Alejandría, y de ahí al olvido. Desliza: la ruta del esquema se mueve contigo.</p>
+      </div>
+    </div>
+    <div class="journey">
+      <aside class="route-panel">
+        <svg viewBox="0 0 640 520" id="routeSvg" role="img" aria-label="Esquema del recorrido del cuerpo de Alejandro: Babilonia — Damasco — Menfis — Alejandría">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(235,225,203,.05)" stroke-width="1"/></pattern>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <rect width="640" height="520" fill="url(#grid)"/>
+          <g stroke="rgba(127,159,208,.32)" fill="none" stroke-width="1">
+            <path d="M110 250c10-6 20-6 30 0s20 6 30 0 20-6 30 0 20 6 30 0 20-6 30 0 20 6 30 0"/>
+            <path d="M140 272c10-6 20-6 30 0s20 6 30 0 20-6 30 0 20 6 30 0 20-6 30 0"/>
+            <path d="M170 228c10-6 20-6 30 0s20 6 30 0 20-6 30 0 20 6 30 0"/>
+          </g>
+          <text x="230" y="207" class="sea-l">MARE INTERNUM</text>
+          <path class="ghost" d="M400,170 C330,110 200,70 90,70"/>
+          <path class="ghost" d="M300,420 C250,445 170,440 110,410"/>
+          <path id="routePath" class="route-base" d="M560,250 C520,205 460,178 400,170 C330,162 318,330 300,420 C285,395 240,350 215,300"/>
+          <path id="routeFill" class="route-fill" d="M560,250 C520,205 460,178 400,170 C330,162 318,330 300,420 C285,395 240,350 215,300"/>
+          <g class="node ghost-n"><circle cx="90" cy="70" r="4"/><text class="sub" x="90" y="42">Plan de Perdicas</text><text x="90" y="58">Egas · Macedonia</text></g>
+          <g class="node ghost-n"><circle cx="110" cy="410" r="4"/><text x="110" y="436">Siwa · oráculo de Amón</text><text class="sub" x="110" y="452">Voluntad de Alejandro</text></g>
+          <g class="node" data-n="babylon"><circle cx="560" cy="250" r="5"/><text class="sub" x="560" y="214">muerte · 323 a. C.</text><text x="560" y="231">Babilonia</text></g>
+          <g class="node" data-n="damascus"><circle cx="400" cy="170" r="5"/><text class="sub" x="400" y="134">intercepción · 321 a. C.</text><text x="400" y="151">Damasco · Siria</text></g>
+          <g class="node" data-n="memphis"><circle cx="300" cy="420" r="5"/><text x="340" y="425" style="text-anchor:start">Menfis</text><text class="sub" x="340" y="441" style="text-anchor:start">321 — ca. 280 a. C.</text></g>
+          <g class="node" data-n="alexandria"><circle cx="215" cy="300" r="5"/><text x="200" y="297" style="text-anchor:end">Alejandría</text><text class="sub" x="200" y="313" style="text-anchor:end">desde ca. 280 a. C.</text></g>
+          <g id="marker" transform="translate(560,250)"><circle r="18" class="halo"/><circle r="6" class="core"/></g>
+          <g transform="translate(588,62)" fill="none" stroke="rgba(201,165,91,.45)">
+            <circle r="22"/><path d="M0-30V30M-30 0H30" stroke-width=".7"/>
+            <path d="M0-30L6 0L0 30L-6 0Z" fill="rgba(201,165,91,.5)" stroke="none"/>
+            <path d="M-30 0L0 6L30 0L0-6Z" fill="rgba(201,165,91,.22)" stroke="none"/>
+            <text y="-36" text-anchor="middle" style="font-family:var(--caps);font-size:10px;fill:#c9a55b;letter-spacing:2px" stroke="none">N</text>
+          </g>
+        </svg>
+        <div class="route-meta">
+          <div class="yr" id="routeYear">323 a. C.</div>
+          <div class="loc">Ubicación del cuerpo<b id="routeLoc">Babilonia</b></div>
+        </div>
+      </aside>
+      <div class="steps" id="steps">
+        <article class="step" data-node="babylon" data-year="323 a. C." data-loc="Babilonia">
+          <div class="when">323 a. C. · Babilonia</div>
+          <h3>Muerte en el palacio de Nabucodonosor</h3>
+          <p>Tras diez días de fiebre, Alejandro murió sin nombrar un heredero indiscutible. Mientras los generales se repartían el poder, el cuerpo permaneció casi una semana sin vigilancia bajo el calor del verano y, según Curcio Rufo, no mostraba signos de descomposición. Embalsamadores egipcios y caldeos lo prepararon para el largo camino; según una versión, el cuerpo fue colocado en miel.</p>
+          <span class="src">Curcio Rufo X, 10 · Arriano VII, 25–28 · Plutarco, «Alejandro», 76–77</span>
+        </article>
+        <article class="step" data-node="babylon" data-year="323–321 a. C." data-loc="Babilonia">
+          <div class="when">323–321 a. C. · Babilonia</div>
+          <h3>Un templo de oro sobre ruedas</h3>
+          <p>Durante casi dos años, el ingeniero Arrideo construyó el carro fúnebre: un pórtico jónico de oro, una bóveda de escamas doradas con piedras preciosas, campanillas de oro y paneles pintados: Alejandro en su carro, elefantes de guerra, la flota. La comitiva la arrastraban 64 mulos con coronas doradas, y por delante iban zapadores allanando el camino.</p>
+          <span class="src">Diodoro Sículo XVIII, 26–28</span>
+        </article>
+        <article class="step" data-node="damascus" data-year="321 a. C." data-loc="Siria, cerca de Damasco">
+          <div class="when">321 a. C. · Siria</div>
+          <h3>El secuestro del siglo</h3>
+          <p>El regente Perdicas ordenó llevar el cuerpo a Egas, la necrópolis de los reyes macedonios; Alejandro, según la tradición, había pedido ser enterrado junto al oráculo de Amón en Siwa. Pero en Siria el cortejo se topó con Ptolomeo y su ejército. Este se ganó a la escolta y se llevó al rey a Egipto: poseer el cuerpo del fundador daba legitimidad a la dinastía. Perdicas lo persiguió, pero murió a orillas del Nilo a manos de sus propios oficiales.</p>
+          <span class="src">Diodoro XVIII, 28 · Pausanias I, 6 · Arriano, «Sucesos posteriores a Alejandro»</span>
+        </article>
+        <article class="step" data-node="memphis" data-year="321 — ca. 280 a. C." data-loc="Menfis">
+          <div class="when">321 — ca. 280 a. C. · Menfis</div>
+          <h3>Cuarenta años en la antigua capital</h3>
+          <p>Ptolomeo enterró a Alejandro en Menfis «según el rito macedonio», probablemente en la necrópolis de Saqqara, junto al Serapeum. Andrew Chugg sostiene que el ataúd fue el sarcófago vacío del último faraón, Nectanebo II. Aquí mismo, el antiguo guardaespaldas escribió sus memorias de las campañas, la fuente principal de Arriano.</p>
+          <span class="src">Pausanias I, 6–7 · Curcio Rufo X, 10</span>
+        </article>
+        <article class="step" data-node="alexandria" data-year="ca. 280 a. C." data-loc="Alejandría">
+          <div class="when">ca. 280 a. C. · Alejandría</div>
+          <h3>Traslado a la ciudad de Alejandro</h3>
+          <p>Ptolomeo II Filadelfo trasladó el cuerpo a la nueva capital fundada por el propio rey. La primera tumba se alzaba probablemente en el barrio real de Brucheion. Alejandro se convirtió en divinidad protectora de la ciudad y de la dinastía: los documentos de todo Egipto se fechaban por el nombre de su sacerdote.</p>
+          <span class="src">Pausanias I, 7 · Estrabón XVII, 1, 8</span>
+        </article>
+        <article class="step" data-node="alexandria" data-year="ca. 215 a. C." data-loc="Alejandría · Soma">
+          <div class="when">ca. 215 a. C. · Alejandría</div>
+          <h3>La Soma: mausoleo de la dinastía</h3>
+          <p>Ptolomeo IV Filopator construyó en el centro de la ciudad la Soma: un recinto amurallado donde, en torno a la tumba de Alejandro, se alineaban las sepulturas de los Ptolomeos. Según Estrabón, formaba «parte de los palacios reales». La calle de la Soma cruzaba la Vía Canópica, la avenida principal de la ciudad, y ese cruce se sigue buscando hoy.</p>
+          <span class="src">Zenobio III, 94 · Estrabón XVII, 1, 8 · Aquiles Tacio V, 1</span>
+        </article>
+        <article class="step" data-node="alexandria" data-year="89 a. C." data-loc="Alejandría · Soma">
+          <div class="when">89 a. C. · Alejandría</div>
+          <h3>Oro convertido en monedas</h3>
+          <p>Ptolomeo X Alejandro I, endeudado con sus mercenarios, fundió el sarcófago de oro para acuñar moneda y lo sustituyó por uno de vidrio, de cristal de roca. Los alejandrinos expulsaron al rey sacrílego, pero el ataúd transparente permaneció: desde entonces, cualquier visitante podía ver al propio Alejandro.</p>
+          <span class="src">Estrabón XVII, 1, 8</span>
+        </article>
+        <article class="step" data-node="alexandria" data-year="48–30 a. C." data-loc="Alejandría · Soma">
+          <div class="when">48–30 a. C. · Alejandría</div>
+          <h3>César y Augusto ante la tumba</h3>
+          <p>Julio César descendió a la cámara en el 48 a. C., persiguiendo a Pompeyo. Octaviano, tras conquistar Egipto en el 30 a. C., ordenó sacar el sarcófago, colocó sobre él una corona de oro, cubrió el cuerpo de flores y, según Dión Casio, al tocarle el rostro le rompió un trozo de la nariz. Se negó a ver las tumbas de los Ptolomeos: «Quería ver al rey, no a los muertos».</p>
+          <span class="src">Lucano X · Suetonio, «Augusto», 18 · Dión Casio LI, 16</span>
+        </article>
+        <article class="step" data-node="alexandria" data-year="40–215 d. C." data-loc="Alejandría · Soma">
+          <div class="when">40–215 d. C. · Alejandría</div>
+          <h3>Los últimos peregrinos</h3>
+          <p>Calígula sacó de la tumba la coraza de Alejandro y la lució en público. Septimio Severo, en el año 200, selló la cámara y escondió dentro libros secretos. En 215, Caracalla, que se consideraba un nuevo Alejandro, se quitó el manto púrpura, los anillos y el cinturón y los depositó sobre el sepulcro. Es el último testimonio fiable sobre el cuerpo.</p>
+          <span class="src">Suetonio, «Calígula», 52 · Dión Casio LXXVI, 13 · Herodiano IV, 8</span>
+        </article>
+        <article class="step" data-node="alexandria" data-year="272–400 d. C." data-loc="Alejandría · ?">
+          <div class="when">272–400 d. C. · Alejandría</div>
+          <h3>La desaparición</h3>
+          <p>Bajo Aureliano, en el 272, ardió el Brucheion. En el 365 un tsunami arrasó la ciudad. En el 391, por los edictos de Teodosio, los cristianos saquearon el Serapeum. Hacia el 390 Libanio aún menciona el cuerpo de Alejandro expuesto a la vista, y hacia el 400 Juan Crisóstomo ya pregunta: «¿Dónde está la tumba de Alejandro?». El rastro se pierde.</p>
+          <span class="src">Ammiano Marcelino XXII, 16 · Libanio, Discurso XLIX · Juan Crisóstomo, Homilía XXVI</span>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- III. WITNESSES -->
+<section id="witnesses">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="num">III</div>
+      <div>
+        <h2>Testimonios de los <em>testigos</em></h2>
+        <p class="lead">Diez autores antiguos que vieron la tumba con sus propios ojos o escribieron siguiendo el rastro reciente. Sus frases son las únicas «pruebas» con las que cuenta la investigación.</p>
+      </div>
+    </div>
+    <div class="quotes" id="quotes"></div>
+    <div class="qnav"><span class="hint">← Desliza horizontalmente →</span><div><button id="qPrev" aria-label="Anterior">←</button><button id="qNext" aria-label="Siguiente">→</button></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- IV. HYPOTHESES -->
+<section id="hypotheses">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="num">IV</div>
+      <div>
+        <h2>Nueve <em>versiones</em></h2>
+        <p class="lead">Desde las casi unánimes hasta las abiertamente fantásticas. Pulsa una tarjeta: dentro encontrarás los argumentos a favor y en contra, la historia de las búsquedas y un punto en el mapa.</p>
+      </div>
+    </div>
+    <div class="filters" id="filters">
+      <button class="on" data-f="all">Todas las versiones</button>
+      <button data-f="alex">Alejandría</button>
+      <button data-f="out">Fuera de la ciudad</button>
+      <button data-f="rejected">Descartadas</button>
+    </div>
+    <div class="cards stagger" id="cards"></div>
+    <p class="note">* El «índice de verosimilitud» es una valoración subjetiva de la redacción que refleja en qué medida las fuentes y la bibliografía científica respaldan la hipótesis. No es un hecho arqueológico: ninguna de las versiones ha sido confirmada por un hallazgo.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- V. MAP -->
+<section id="map-section">
+  <div class="wrap" id="map">
+    <div class="sec-head reveal">
+      <div class="num">V</div>
+      <div>
+        <h2>Mapa de las <em>búsquedas</em></h2>
+        <p class="lead">La ruta del cortejo fúnebre y todos los puntos donde se buscó la tumba, se encontró y se «encontró». Elige un lugar de la lista y el mapa volará hasta él.</p>
+      </div>
+    </div>
+    <div class="map-wrap">
+      <div class="map-list" id="mapList"></div>
+      <div class="map-area">
+        <div id="mapCanvas"></div>
+        <div class="map-ctl"><button class="on" data-layer="dark">Esquema</button><button data-layer="sat">Satélite</button><button data-fly="alex">Alejandría</button><button data-fly="all">Ruta completa</button></div>
+        <div class="map-fallback" id="mapFallback"><div><p style="font-family:var(--serif);font-size:1.6rem;color:var(--gold2);margin-bottom:8px">El mapa no se ha cargado</p><p>No hay conexión con el servidor cartográfico. La lista de lugares de la izquierda sigue abriendo las fichas de las hipótesis.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VI. CHRONICLE -->
+<section id="chronicle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="num">VI</div>
+      <div>
+        <h2>Crónica de las <em>búsquedas</em></h2>
+        <p class="lead">Durante mil quinientos años se ha buscado la tumba: peregrinos medievales, los sabios de Napoleón, Schliemann, un camarero obsesionado y arqueólogos modernos con georradares.</p>
+      </div>
+    </div>
+    <div class="ledger stagger" id="ledger"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VII. WHY -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="num">VII</div>
+      <div>
+        <h2>Por qué no la han <em>encontrado</em></h2>
+        <p class="lead">El mausoleo más famoso de la Antigüedad no podía simplemente disolverse. Pero Alejandría hizo casi todo para que ocurriera.</p>
+      </div>
+    </div>
+    <div class="why-grid stagger">
+      <div class="why reveal"><svg viewBox="0 0 32 32"><path d="M3 24l5-8 5 11 5-14 5 9 6-6"/><path d="M2 29h28"/></svg><span class="k">Causa 01</span><h4>Terremotos y descenso de la costa</h4><p>Alejandría se asienta sobre una costa que se hunde: en dos milenios la línea de la costa ha descendido 6–8 metros bajo el agua. Los terremotos de 365, 956, 1303 y 1323 derribaron el faro y, probablemente, todo lo que aún quedaba en pie en el barrio real.</p></div>
+      <div class="why reveal"><svg viewBox="0 0 32 32"><path d="M2 26c4 0 4-4 8-4s4 4 8 4 4-4 8-4 4 4 6 4"/><path d="M2 18c4 0 4-4 8-4s4 4 8 4 4-4 8-4 4 4 6 4"/><path d="M8 10c4-6 12-6 16 0"/></svg><span class="k">Causa 02</span><h4>El tsunami del 21 de julio de 365</h4><p>Ammiano Marcelino describe cómo el mar se retiró y luego una ola arrojó los barcos sobre los tejados. Murieron miles de alejandrinos; el Brucheion costero quedó arrasado. Un siglo después todavía se conmemoraba en la ciudad el aniversario de la catástrofe.</p></div>
+      <div class="why reveal"><svg viewBox="0 0 32 32"><path d="M16 3c2 6 8 8 8 15a8 8 0 0 1-16 0c0-4 2-6 3-8 0 3 1 5 3 6-1-5 1-10 2-13z"/></svg><span class="k">Causa 03</span><h4>Guerras y cambio de fe</h4><p>En el 272, Aureliano incendió el barrio real al sofocar una revuelta. En el 391, los cristianos destruyeron el Serapeum. La tumba de un pagano divinizado en el centro de la capital del cristianismo egipcio estaba condenada: o la destruyeron o la escondieron.</p></div>
+      <div class="why reveal"><svg viewBox="0 0 32 32"><path d="M16 4l12 6-12 6L4 10z"/><path d="M4 16l12 6 12-6"/><path d="M4 22l12 6 12-6"/></svg><span class="k">Causa 04</span><h4>Una ciudad sobre otra</h4><p>Los estratos antiguos yacen a 8–12 metros de profundidad bajo las calles actuales, por debajo del nivel freático. Por encima se extiende la densa edificación de una ciudad de cinco millones de habitantes. Solo se puede excavar en solares vacíos y patios contados.</p></div>
+      <div class="why reveal"><svg viewBox="0 0 32 32"><rect x="3" y="18" width="10" height="10"/><rect x="13" y="18" width="10" height="10"/><rect x="8" y="8" width="10" height="10"/><path d="M23 18l6 10M19 8l9 0"/></svg><span class="k">Causa 05</span><h4>La piedra acabó en los muros</h4><p>Durante siglos, el mármol y el granito de los edificios antiguos se convirtieron en cal o se reutilizaron en fortalezas y mezquitas. El fuerte de Qaitbay está construido con bloques del faro de Alejandría. La Soma probablemente fue desmontada del mismo modo: piedra a piedra.</p></div>
+      <div class="why reveal"><svg viewBox="0 0 32 32"><path d="M9 3h14M9 29h14M10 3c0 8 6 10 6 13s-6 5-6 13M22 3c0 8-6 10-6 13s6 5 6 13"/></svg><span class="k">Causa 06</span><h4>El olvido</h4><p>La ciudad medieval se encogió hasta el istmo junto al puerto, y el antiguo centro se convirtió en un descampado. Cuando llegó Napoleón en 1798, Alejandría tenía unos ocho mil habitantes, y nadie recordaba ya dónde se alzaban los palacios de los Ptolomeos.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VIII. VERDICT -->
+<section id="verdict">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="num">VIII</div>
+      <div>
+        <h2>Tu <em>veredicto</em></h2>
+        <p class="lead">Jurado, ya conoces los materiales del caso. Es hora de votar y de comprobar con cuánta atención has leído.</p>
+      </div>
+    </div>
+    <div class="verdict">
+      <div class="panel reveal" id="poll">
+        <h3>¿Dónde crees que está la tumba?</h3>
+        <p class="sub">Encuesta de demostración: los resultados se guardan solo en tu navegador.</p>
+        <div id="pollBody"></div>
+      </div>
+      <div class="panel quiz reveal" id="quiz">
+        <h3>Examen del investigador</h3>
+        <p class="sub">Seis preguntas sobre los materiales del caso.</p>
+        <div id="quizBody"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="#top" class="brand"><svg viewBox="-100 -100 200 200" class="sun-logo" aria-hidden="true"></svg><span><b>Σῆμα</b><small>La tumba de Alejandro</small></span></a>
+        <p>Un expediente interactivo sobre la caza arqueológica más larga de la historia. Todas las fechas y citas están contrastadas con las fuentes antiguas; las reconstrucciones y el «índice de verosimilitud» son interpretación de la redacción.</p>
+      </div>
+      <div>
+        <h5>Fuentes antiguas</h5>
+        <ul>
+          <li>Diodoro Sículo. Biblioteca histórica, XVIII</li>
+          <li>Estrabón. Geografía, XVII, 1</li>
+          <li>Quinto Curcio Rufo. Historia de Alejandro, X</li>
+          <li>Pausanias. Descripción de Grecia, I, 6–7</li>
+          <li>Suetonio. Vida de los doce césares</li>
+          <li>Dion Casio. Historia romana, LI; LXXVI</li>
+          <li>Herodiano. Historia del Imperio, IV</li>
+          <li>Lucano. Farsalia, X · Amiano Marcelino, XXII; XXVI</li>
+          <li>Juan Crisóstomo. Homilías sobre 2 Cor., XXVI</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Estudios modernos</h5>
+        <ul>
+          <li>A. Chugg. The Lost Tomb of Alexander the Great (2004); The Quest for the Tomb of Alexander the Great (2012)</li>
+          <li>N. J. Saunders. Alexander's Tomb: The Two-Thousand Year Obsession (2006)</li>
+          <li>P. M. Fraser. Ptolemaic Alexandria (1972)</li>
+          <li>A. Adriani. La tomba di Alessandro (2000)</li>
+          <li>J.-Y. Empereur. Alexandria Rediscovered (1998)</li>
+          <li>J. McKenzie. The Architecture of Alexandria and Egypt (2007)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy"><span>Σῆμα · Caso n.º 323 · Abierto</span><span>HTML · CSS · JavaScript puros, un solo archivo</span><span>Foto: Pexels</span></div>
+  </div>
+</footer>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="bd" data-close></div>
+  <div class="box" role="dialog" aria-modal="true">
+    <button class="x" data-close aria-label="Cerrar">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<button class="totop" id="totop" aria-label="Arriba">↑</button>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+/* ====================== DATA ====================== */
+const YEAR = new Date().getFullYear();
+const YEARS_SINCE = YEAR + 322;
+
+const HYP = [
+ {id:'nabi',n:'01',title:'Mezquita de Nabi Daniel',place:'Alejandría · cruce de las calles Horreya y Nabi Daniel',tag:'alex',status:'Versión tradicional',badge:'gold',score:72,coords:[31.1968,29.9040],zoom:16,
+  summary:'La localización clásica de la Soma, en el cruce de las dos calles principales de la ciudad antigua, la Vía Canópica y la calle de la Soma. Aquí mismo, bajo una mezquita del siglo XVIII, desde 1850 se «ve» el sarcófago de cristal de roca.',
+  details:'Los autores antiguos — Estrabón, Aquiles Tacio, Zenobio — sitúan la Soma «en el centro de la ciudad», dentro del barrio real, junto al cruce de las grandes avenidas. La reconstrucción del plano de la Alejandría antigua que el astrónomo Mahmud Bey al-Falaki realizó en 1865 llevó ese punto hasta la mezquita de Nabi Daniel. Ya en 1850 el dragomán del consulado ruso, Ambrosio Skilitsi, afirmó que en el sótano de la mezquita, a través de una rendija de la puerta, había visto un sarcófago de vidrio con un cuerpo tocado con diadema, rodeado de montones de papiros. En 1888 Heinrich Schliemann pidió permiso para excavar bajo la mezquita y se lo negaron. Las excavaciones de Evaristo Breccia (1907) y los estudios posteriores de la cripta no hallaron nada anterior a la época tardo-romana, pero la tradición se mantiene: cada nueva generación de arqueólogos vuelve a este cruce.',
+  pro:['Coincide con las descripciones de Estrabón y Aquiles Tacio: centro de la ciudad, cruce de las calles principales','El nombre «Daniel» pudo superponerse al culto musulmán de Iskandar Dhu al-Qarnayn','León el Africano vio en el siglo XVI en Alejandría una capilla con la «tumba de Alejandro» a la que acudían peregrinos'],
+  con:['El relato de Skilitsi no ha sido confirmado por nadie y parece una aventura','La cripta de la mezquita está estudiada: nada helenístico','La retícula de calles de al-Falaki se discute: el cruce auténtico pudo estar a cientos de metros']},
+ {id:'shallalat',n:'02',title:'Jardines de Shallalat',place:'Alejandría · parte oriental del barrio real',tag:'alex',status:'Excavaciones en curso',badge:'green',score:68,coords:[31.2042,29.9118],zoom:16,
+  summary:'Desde 1998, la arqueóloga griega Kalliopi Limneos-Papakosta excava aquí a más de 10 metros de profundidad. Se han hallado una estatua de mármol de Alejandro, una calzada helenística y los cimientos de un edificio monumental.',
+  details:'El solar se encuentra dentro del antiguo Brucheion, el barrio real donde Estrabón situaba la Soma. En 2009, la misión del Instituto Helénico de Estudios de la Civilización Alejandrina descubrió una estatua de mármol de Alejandro de comienzos de la época helenística (hoy en el Museo Nacional de Alejandría). Después aparecieron una calzada pavimentada en caliza de época ptolemaica y los restos de un gran edificio público cuyos cimientos descienden por debajo del nivel freático. Papakosta está convencida de hallarse a cien metros de la Soma y llama a su excavación «la obra de mi vida». Los trabajos continúan; equipos de National Geographic los han seguido.',
+  pro:['La única excavación sistemática y prolongada dentro del barrio real','Se ha encontrado el horizonte ptolemaico: calzada, cimientos monumentales, estatua de Alejandro','La ubicación concuerda con la reconstrucción del barrio real según Estrabón'],
+  con:['Ninguna inscripción relacionada directamente con la Soma','Los edificios monumentales del barrio real podían ser cualquier cosa, de un templo a un gimnasio','Las aguas subterráneas hacen casi imposibles excavaciones más profundas']},
+ {id:'alabaster',n:'03',title:'La tumba de alabastro',place:'Alejandría · cementerio latino (Terra Santa)',tag:'alex',status:'Hipótesis académica',badge:'gold',score:55,coords:[31.1952,29.9182],zoom:16,
+  summary:'Una cámara de enormes bloques de alabastro hallada en 1907 es el único monumento de tipo funerario macedonio en Alejandría. Achille Adriani la consideraba el vestíbulo de la tumba de Alejandro.',
+  details:'La construcción, de losas monolíticas de alabastro (un espacio interior de unos 5 × 3 m), la descubrió Evaristo Breccia. Su forma y su técnica son características de las tumbas reales macedonias de finales del siglo IV y comienzos del III a. C., es decir, de la primera época ptolemaica. El arqueólogo italiano Achille Adriani, director del Museo Greco-Romano, en su libro póstumo «La tomba di Alessandro» (2000) sugirió que se trata de la antecámara de la primera tumba alejandrina de Alejandro, construida antes de la Soma de Filopator. El monumento se alza en el jardín del cementerio, rodeado de edificaciones modernas; una excavación completa a su alrededor es imposible.',
+  pro:['El tipo macedonio de la tumba es único en Alejandría','La datación corresponde a la primera época ptolemaica','Su ubicación está en la zona atribuida al barrio real'],
+  con:['Pudo pertenecer a cualquiera de los primeros Ptolomeos o a la nobleza','No hay inscripciones ni ajuar funerario','Para ser «la tumba de un dios», resulta demasiado modesta']},
+ {id:'harbour',n:'04',title:'El fondo del puerto oriental',place:'Alejandría · barrio real sumergido',tag:'alex',status:'Hipótesis indirecta',badge:'grey',score:35,coords:[31.2075,29.8965],zoom:15,
+  summary:'Las expediciones subacuáticas de Franck Goddio hallaron palacios sumergidos, la isla de Antírodos y las columnatas del barrio real. Parte del Brucheion se hundió bajo el agua, quizá junto con lo que quedaba de la Soma.',
+  details:'Una serie de terremotos y el descenso gradual de la línea de costa (6–8 metros) sumergieron la parte septentrional del barrio real bajo las aguas del puerto oriental. Desde 1992, las expediciones del Instituto Europeo de Arqueología Submarina han cartografiado calzadas, columnatas, esfinges y cimientos de construcciones palaciegas. Sin embargo, Estrabón situaba claramente la Soma en el interior del complejo palaciego, no en la orilla, por lo que la mayoría de los investigadores cree que el mausoleo permaneció en tierra firme: bajo la ciudad moderna.',
+  pro:['El hundimiento de parte del Brucheion está demostrado','Bajo el agua, los estratos helenísticos se conservan mejor que bajo la ciudad'],
+  con:['Estrabón no vincula la Soma con la línea de costa','Entre los hallazgos subacuáticos no hay nada funerario']},
+ {id:'memphis',n:'05',title:'Menfis y Saqqara',place:'Egipto · necrópolis de Saqqara, Serapeum',tag:'out',status:'Hipótesis del primer enterramiento',badge:'gold',score:25,coords:[29.8742,31.2159],zoom:13,
+  summary:'El cuerpo de Alejandro reposó casi cuarenta años en Menfis. Andrew Chugg sostiene que yació en el sarcófago del faraón Nectanebo II, y que el semicírculo de estatuas griegas junto al Serapeum marca el lugar de la tumba.',
+  details:'Pausanias relata que Ptolomeo enterró a Alejandro en Menfis «según el rito macedonio». El investigador británico Andrew Chugg reparó en el sarcófago de Nectanebo II, el último faraón egipcio, que huyó de los persas y nunca llegó a usar su propia tumba. Ese sarcófago apareció en Alejandría, donde en la Edad Media se veneraba como «el baño de Alejandro»; según Chugg, Ptolomeo lo empleó para un enterramiento provisional y luego lo trasladó a la capital junto con el cuerpo. Junto al Serapeum de Saqqara se alza la «exedra de los filósofos», un semicírculo de estatuas helenísticas de poetas y sabios griegos, extraño en una necrópolis egipcia; también se relaciona con el mausoleo menfita. Algunos van más lejos y suponen que a Alejandría no se trasladó todo, o que se trasladó un ataúd vacío.',
+  pro:['Lugar documentado del primer enterramiento','El sarcófago de Nectanebo II apareció efectivamente en Alejandría, y vacío','La exedra griega junto al Serapeum es una anomalía en Saqqara'],
+  con:['Los autores antiguos son unánimes: el cuerpo fue trasladado a Alejandría','Los emperadores romanos vieron el cuerpo precisamente en Alejandría','El sarcófago es solo una prueba indirecta']},
+ {id:'venice',n:'06',title:'La basílica de San Marcos',place:'Venecia, Italia · basílica de San Marcos',tag:'out',status:'Hipótesis audaz',badge:'blue',score:15,coords:[45.4345,12.3397],zoom:16,
+  summary:'En 828, unos mercaderes venecianos sacaron de Alejandría las reliquias de san Marcos escondidas bajo carne de cerdo. Andrew Chugg sugirió que, bajo la apariencia del evangelista, lo que salió de la ciudad fue el cuerpo de Alejandro.',
+  details:'Según la hipótesis de Chugg (2004), a finales del siglo IV, cuando los cristianos arrasaban los santuarios paganos, la momia de Alejandro se escondió haciéndola pasar por los restos de san Marcos, cuyo cuerpo, según la tradición, había sufrido ya un intento de cremación en el año 68. La cronología encaja: las noticias sobre la tumba de Alejandro se interrumpen hacia 390–400, y en esa misma época aparece en Alejandría la venerada tumba de Marcos. Chugg señala además un bloque con el relieve de un escudo macedonio con estrella, hallado en la fábrica de la basílica y probablemente traído de Alejandría. Las reliquias de San Marcos se examinaron en 1811, pero nunca se han estudiado científicamente. La hipótesis podría comprobarse con un análisis de los restos, al que Venecia no da su consentimiento.',
+  pro:['Coincidencia cronológica entre la desaparición de una reliquia y la aparición de la otra','Un fragmento de relieve helenístico con escudo macedonio en la basílica','En teoría es verificable: los restos existen'],
+  con:['No hay ninguna indicación escrita de la sustitución','Los cristianos del siglo IV difícilmente habrían salvado a un «ídolo pagano»','La mayoría de los historiadores considera la versión una especulación']},
+ {id:'siwa',n:'07',title:'El oasis de Siwa',place:'Egipto · desierto libio, Maraki',tag:'rejected',status:'Descartada',badge:'red',score:5,coords:[29.2032,25.5196],zoom:11,
+  summary:'En 1995, Liana Souvaltzi anunció que había encontrado la tumba de Alejandro junto al oráculo de Amón, donde él mismo había pedido ser enterrado. Las comisiones griega y egipcia calificaron el hallazgo de error.',
+  details:'Alejandro deseaba de verdad reposar junto al santuario de Amón en Siwa (lo escriben Diodoro, Curcio Rufo y Justino), y hacia allí llevaba formalmente el cuerpo Ptolomeo al «interceptar» el cortejo. La investigadora griega Liana Souvaltzi excavó en Maraki desde 1989 y en enero de 1995 anunció el hallazgo de una tumba macedonia con inscripciones que mencionaban a Alejandro y a Ptolomeo. La comisión del Ministerio de Cultura griego refutó su lectura: la construcción resultó ser tardoantigua y las «inscripciones» eran fragmentos sin nombres. En 1996 Egipto retiró el permiso de excavación.',
+  pro:['Coincide con la voluntad del propio Alejandro','La importancia simbólica del lugar para los Ptolomeos'],
+  con:['Refutada por expertos de ambos países','Los autores antiguos hablan sin ambigüedad de Menfis y Alejandría','La planta del conjunto no es macedonia']},
+ {id:'amphipolis',n:'08',title:'El túmulo de Kasta',place:'Anfípolis, Grecia',tag:'rejected',status:'Descartada oficialmente',badge:'red',score:3,coords:[40.8327,23.8641],zoom:14,
+  summary:'La gigantesca tumba descubierta en 2014 (497 m de perímetro) desató una ola de esperanzas. Pero la datación y los hallazgos apuntan a un monumento de finales del siglo IV a. C. construido probablemente para Hefestión, no para Alejandro.',
+  details:'Las excavaciones de Katerina Peristeri sacaron a la luz el mayor complejo funerario de Grecia, con esfinges, cariátides y un mosaico del rapto de Perséfone. Los monogramas de Hefestión en los bloques permitieron suponer que se trata del heroon del amigo más cercano de Alejandro, encargado por el propio rey. En la cámara se hallaron los restos de cinco personas, entre ellas una mujer de más de 60 años, posiblemente Olimpia, la madre de Alejandro. El Ministerio de Cultura griego descartó la hipótesis del enterramiento del propio Alejandro: su cuerpo nunca abandonó Egipto.',
+  pro:['La escala y la calidad son dignas de un rey','Macedonia es la cuna de la dinastía y el destino inicial del cortejo'],
+  con:['El cuerpo de Alejandro fue llevado a Egipto, donde se le vio durante 500 años más','Las inscripciones apuntan a Hefestión','La datación no deja «ventana» alguna para un nuevo enterramiento']},
+ {id:'istanbul',n:'09',title:'El «sarcófago de Alejandro»',place:'Estambul · Museo Arqueológico',tag:'rejected',status:'Mito',badge:'grey',score:0,coords:[41.0116,28.9811],zoom:16,
+  summary:'El magnífico sarcófago de mármol de Sidón (hallado en 1887) está decorado con escenas de las batallas de Alejandro, pero perteneció a Abdalonimo, rey de Sidón, a quien Alejandro elevó al trono.',
+  details:'Una de las obras maestras de la escultura helenística, el sarcófago de la necrópolis real de Sidón recibe el nombre de «Alejandro» solo por sus imágenes: en los relieves, el rey con casco de león combate a los persas en Iso y caza leones. Su dueño, según el consenso, fue Abdalonimo, el gobernante de Sidón nombrado por Alejandro. El cuerpo de Alejandro nunca abandonó Egipto en época de los Ptolomeos, y en Sidón no fue enterrado según ninguna versión. Aun así, cada año los turistas llegan a Estambul «a la tumba de Alejandro».',
+  pro:['El único «sarcófago de Alejandro» que puede verse hoy'],
+  con:['Su pertenencia a Abdalonimo es un hecho aceptado','Contradice a todas las fuentes antiguas']}
+];
+
+const ROUTE_PTS = [
+ {id:'r-babylon',title:'Babilonia',sub:'Lugar de la muerte · 323 a. C.',coords:[32.5364,44.4208],zoom:11,cls:'route',text:'Palacio de Nabucodonosor II. Aquí murió Alejandro el 10/11 de junio de 323 a. C.; aquí se construyó durante dos años el carro fúnebre de oro.'},
+ {id:'r-damascus',title:'Damasco',sub:'Intercepción del cortejo · 321 a. C.',coords:[33.5138,36.2765],zoom:9,cls:'route',text:'En algún lugar de Siria, Ptolomeo salió al encuentro del cortejo fúnebre y lo condujo a Egipto.'},
+ {id:'r-memphis',title:'Menfis',sub:'Primer enterramiento · 321 — ca. 280 a. C.',coords:[29.8447,31.2506],zoom:12,cls:'route',text:'La antigua capital de Egipto. Durante unos cuarenta años el cuerpo reposó aquí «según el rito macedonio».'},
+ {id:'r-alex',title:'Alejandría',sub:'Soma · última inspección 215 d. C.',coords:[31.2001,29.9187],zoom:13,cls:'route',text:'La ciudad de Alejandro. Aquí se alzaba el mausoleo Soma; aquí vieron la tumba César, Augusto, Calígula, Severo y Caracalla.'},
+ {id:'r-aigai',title:'Egas (Vergina)',sub:'Adonde se dirigía por orden de Perdicas',coords:[40.4833,22.3167],zoom:13,cls:'route',text:'La necrópolis de los reyes macedonios. El cuerpo nunca llegó hasta aquí, pero aquí yace Filipo II, el padre de Alejandro.'}
+];
+
+const QUOTES = [
+ {w:'Diodoro Sículo',work:'«Biblioteca histórica», XVIII, 26–27',y:'siglo I a. C.',m:'Δ',q:'Una bóveda de escamas de oro, cuajada de piedras preciosas, y sobre ella una corona de olivo de oro… La comitiva la arrastraban sesenta y cuatro mulos, cada uno con una corona dorada y, junto a las mejillas, campanillas de oro.',c:'Descripción del carro fúnebre que se construyó durante dos años en Babilonia. Diodoro añade que los habitantes de todas las ciudades del camino acudían a verlo.'},
+ {w:'Estrabón',work:'«Geografía», XVII, 1, 8',y:'ca. 20 d. C.',m:'Σ',q:'Forma parte de los palacios reales también la llamada Soma, un recinto en el que se encuentran las tumbas de los reyes y la de Alejandro… El cuerpo yace allí todavía, pero ya no en el sarcófago de entonces: el actual es de vidrio, pues Ptolomeo lo había depositado en uno de oro.',c:'La única descripción directa del conjunto de la Soma por un testigo que vivió en Alejandría entre el 25 y el 20 a. C.'},
+ {w:'Lucano',work:'«Farsalia», X, 19–22',y:'ca. 65 d. C.',m:'L',q:'Descendió ávido a la caverna excavada para la tumba, donde yace el loco vástago de Filipo de Pela, afortunado salteador al que se llevó la muerte, vengadora del mundo.',c:'El poeta describe la visita de César en el 48 a. C. La palabra «caverna» hizo que los arqueólogos buscaran una cripta subterránea.'},
+ {w:'Suetonio',work:'«El divino Augusto», 18',y:'ca. 120 d. C.',m:'S',q:'Contempló el cuerpo de Alejandro Magno, cuyo sepulcro mandó sacar del santuario: en señal de veneración colocó sobre él una corona de oro y cubrió el cuerpo de flores. Al preguntarle si deseaba ver también el sepulcro de los Ptolomeos, respondió que había querido ver a un rey, no a unos muertos.',c:'Augusto en Alejandría, agosto del 30 a. C. De la frase se deduce que las tumbas de los Ptolomeos estaban separadas del sepulcro de Alejandro.'},
+ {w:'Dión Casio',work:'«Historia romana», LI, 16',y:'ca. 220 d. C.',m:'Δ',q:'Contempló el cuerpo de Alejandro e incluso lo tocó, de modo que, según dicen, se desprendió un trozo de la nariz.',c:'Detalle legendario de la misma visita de Augusto. La nariz es la primera «pérdida» documentada de la momia.'},
+ {w:'Suetonio',work:'«Cayo Calígula», 52',y:'ca. 120 d. C.',m:'S',q:'No pocas veces apareció en público… con la coraza de Alejandro Magno, sacada de su tumba.',c:'Calígula, hacia el 40 d. C. La tumba servía además como tesoro de reliquias, accesible a los emperadores.'},
+ {w:'Dión Casio',work:'«Historia romana», LXXVI, 13',y:'ca. 220 d. C.',m:'Δ',q:'Mandó cerrar la tumba de Alejandro para que en adelante nadie pudiera ver su cuerpo ni leer lo que está escrito en los libros que él mismo reunió y depositó allí.',c:'Septimio Severo, 199/200 d. C. El emperador, aficionado a la magia, escondió en el sepulcro libros secretos de los templos egipcios.'},
+ {w:'Herodiano',work:'«Historia del Imperio», IV, 8, 9',y:'ca. 240 d. C.',m:'H',q:'Quitándose el manto de púrpura, los anillos con piedras preciosas, los cinturones y todo cuanto tenía de valioso, lo depositó sobre la tumba.',c:'Caracalla, 215 d. C.: el último testimonio fiable sobre la tumba y el cuerpo.'},
+ {w:'Ammiano Marcelino',work:'«Hechos», XXII, 16, 15',y:'ca. 390 d. C.',m:'A',q:'Bajo Aureliano, cuando las discordias de los ciudadanos degeneraron en guerras destructivas, la ciudad perdió la mayor parte del barrio llamado Bruquio, que durante largo tiempo fue morada de hombres ilustres.',c:'272 d. C. La Soma, según Estrabón, se alzaba precisamente en el barrio real, el Brucheion.'},
+ {w:'Juan Crisóstomo',work:'«Homilías sobre la segunda carta a los Corintios», XXVI',y:'ca. 400 d. C.',m:'Ι',q:'Dime, ¿dónde está la tumba de Alejandro? Muéstramela y dime el día en que murió.',c:'Pregunta retórica del predicador cristiano: a finales del siglo IV nadie en Alejandría podía ya señalar el lugar.'}
+];
+
+const CHRON = [
+ {y:'ca. 400',s:'d. C.',t:'El rastro se pierde',d:'Juan Crisóstomo pregunta en un sermón dónde está la tumba de Alejandro, y no obtiene respuesta. El último en mencionar el cuerpo es Libanio, hacia el año 390.'},
+ {y:'828',s:'d. C.',t:'Las reliquias de san Marcos zarpan hacia Venecia',d:'Los mercaderes Bono de Malamocco y Rustico de Torcello sacan de Alejandría el cuerpo del evangelista escondido bajo carne de cerdo. Mil doscientos años después, Andrew Chugg sospechará una sustitución.'},
+ {y:'1517',s:'',t:'La capilla de Iskandar',d:'León el Africano describe en Alejandría «una casa pequeña a modo de capilla» con una tumba que los musulmanes veneran como el sepulcro de Alejandro y a la que acuden peregrinos.'},
+ {y:'1798',s:'',t:'El «baño de Alejandro»',d:'Los sabios de la expedición de Napoleón hallan en la mezquita de Attarin un enorme sarcófago venerado como la tumba de Alejandro. En 1801 lo capturan los británicos; los jeroglíficos descifrados después mostrarán que perteneció al faraón Nectanebo II.'},
+ {y:'1850',s:'',t:'El ataúd de cristal bajo la mezquita',d:'El dragomán del consulado ruso Ambrosio Skilitsi afirma que, en el sótano de la mezquita de Nabi Daniel, vio a través de una rendija un sarcófago de vidrio con un cuerpo tocado con diadema y montones de papiros. Nadie pudo verificar el relato.'},
+ {y:'1865',s:'',t:'El plano de al-Falaki',d:'El astrónomo Mahmud Bey al-Falaki reconstruye por encargo de Napoleón III la retícula de calles de la Alejandría antigua y sitúa la Soma en el cruce de las actuales calles Horreya y Nabi Daniel.'},
+ {y:'1888',s:'',t:'A Schliemann le dicen que no',d:'El descubridor de Troya pide permiso para excavar junto a la mezquita de Nabi Daniel. Las autoridades religiosas de Alejandría no permiten perturbar el santuario.'},
+ {y:'1907',s:'',t:'La tumba de alabastro',d:'Evaristo Breccia descubre en el cementerio latino una cámara de bloques monolíticos de alabastro, la única tumba de tipo macedonio de la ciudad. Más tarde, Achille Adriani la llamará el vestíbulo de la tumba de Alejandro.'},
+ {y:'años 1960',s:'',t:'El camarero obsesionado',d:'El griego Stelios Komoutsos, camarero de un café de Alejandría, gasta todos sus ahorros en excavar según sus propios «mapas» y consigue varios permisos oficiales. Resultado: cero. Fama: mundial.'},
+ {y:'1992',s:'',t:'El barrio real bajo el agua',d:'Franck Goddio inicia la cartografía subacuática del puerto oriental y descubre palacios sumergidos, la isla de Antírodos, esfinges y las columnatas del Brucheion.'},
+ {y:'1995',s:'',t:'La sensación de Siwa',d:'Liana Souvaltzi anuncia el hallazgo de la tumba de Alejandro junto al oráculo de Amón. Pocas semanas después, la comisión del Ministerio de Cultura griego refuta la lectura de las inscripciones; Egipto retira la licencia.'},
+ {y:'1998',s:'',t:'Comienzan las excavaciones de Shallalat',d:'Kalliopi Limneos-Papakosta obtiene un solar en los jardines de Shallalat, dentro del antiguo barrio real, y emprende la búsqueda sistemática de la Soma más larga de la historia.'},
+ {y:'2004',s:'',t:'La pista veneciana',d:'Se publica «The Lost Tomb of Alexander the Great», de Andrew Chugg: el sarcófago de Nectanebo II, la tumba menfita y la hipótesis del cuerpo bajo el altar de San Marcos.'},
+ {y:'2009',s:'',t:'Una estatua bajo tierra',d:'En Shallalat aparece una estatua de mármol de Alejandro de comienzos de la época helenística: la primera confirmación sólida de que la excavación se realiza en el barrio real.'},
+ {y:'2014',s:'',t:'Anfípolis',d:'El descubrimiento del gigantesco túmulo de Kasta desata la «fiebre alejandrina». Pronto queda claro que el monumento está dedicado probablemente a Hefestión; Alejandro no está en él.'},
+ {y:'2019–2024',s:'',t:'El horizonte ptolemaico',d:'La misión de Papakosta alcanza el estrato de los siglos IV–III a. C.: una calzada pavimentada y cimientos de un edificio monumental que se hunden bajo el nivel freático. Según las autoridades egipcias, se han emprendido en total más de 140 intentos oficiales de encontrar la tumba.'},
+ {y:String(YEAR),s:'',t:'El caso sigue abierto',d:'Las excavaciones continúan. La tumba sigue sin aparecer.',now:true}
+];
+
+const POLL = [
+ {id:'alex',t:'Bajo el centro de Alejandría: Nabi Daniel o Shallalat'},
+ {id:'harbour',t:'En el fondo del puerto oriental'},
+ {id:'memphis',t:'En Menfis o Saqqara'},
+ {id:'venice',t:'En Venecia, bajo el nombre de san Marcos'},
+ {id:'gone',t:'Destruida sin remedio'},
+ {id:'other',t:'En otro lugar'}
+];
+const POLL_SEED = {alex:128,harbour:23,memphis:31,venice:44,gone:97,other:12};
+
+const QUIZ = [
+ {q:'¿Dónde murió Alejandro Magno?',o:['En Babilonia','En Alejandría','En Pela','En Susa'],a:0,e:'En el palacio de Nabucodonosor II, en Babilonia, el 10/11 de junio de 323 a. C.'},
+ {q:'¿Quién interceptó el cortejo fúnebre camino de Macedonia?',o:['Perdicas','Ptolomeo','Seleuco','Antígono el Tuerto'],a:1,e:'Ptolomeo, sátrapa de Egipto, se llevó el cuerpo a Menfis y con ello cimentó la legitimidad de su dinastía.'},
+ {q:'¿Qué romano, según la leyenda, le rompió la nariz a la momia?',o:['Calígula','Nerón','Augusto','Caracalla'],a:2,e:'Octaviano Augusto en el 30 a. C., según el relato de Dión Casio.'},
+ {q:'¿Por qué sustituyó Ptolomeo X el sarcófago de oro?',o:['Por uno de mármol','Por uno de vidrio','Por uno de plata','Por uno de cedro'],a:1,e:'Por uno de vidrio (cristal de roca): el oro se destinó a pagar a los mercenarios. Lo cuenta Estrabón.'},
+ {q:'¿Qué emperador romano visitó la tumba por última vez con constancia documental?',o:['Adriano','Septimio Severo','Diocleciano','Caracalla'],a:3,e:'Caracalla, en 215 d. C., dejó sobre el sepulcro su manto, sus anillos y su cinturón (Herodiano).'},
+ {q:'¿Qué se llevó Calígula de la tumba?',o:['Una espada','La coraza','El casco','La diadema'],a:1,e:'La coraza de Alejandro, con la que luego el emperador se exhibía en público (Suetonio).'}
+];
+
+/* ====================== HELPERS ====================== */
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const fmt = n=>Math.round(n).toLocaleString('es-ES');
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Vergina sun */
+function drawSun(el,rays=16){
+  const ns='http://www.w3.org/2000/svg',R=96,r0=R*.3,base=R*.2;let d='';
+  for(let i=0;i<rays;i++){
+    const a=i*2*Math.PI/rays,L=i%2?R*.8:R,tx=Math.cos(a)*L,ty=Math.sin(a)*L,ba=a+Math.PI/2,bx=Math.cos(ba)*base/2,by=Math.sin(ba)*base/2,cx=Math.cos(a)*r0,cy=Math.sin(a)*r0;
+    d+=`M${(cx+bx).toFixed(2)},${(cy+by).toFixed(2)}L${tx.toFixed(2)},${ty.toFixed(2)}L${(cx-bx).toFixed(2)},${(cy-by).toFixed(2)}Z`;
+  }
+  const p=document.createElementNS(ns,'path');p.setAttribute('d',d);p.setAttribute('fill','currentColor');el.appendChild(p);
+  const c1=document.createElementNS(ns,'circle');c1.setAttribute('r',r0*.72);c1.setAttribute('fill','none');c1.setAttribute('stroke','currentColor');c1.setAttribute('stroke-width',2.5);el.appendChild(c1);
+  const c2=document.createElementNS(ns,'circle');c2.setAttribute('r',r0*.3);c2.setAttribute('fill','currentColor');el.appendChild(c2);
+}
+$$('.sun-logo, .sun-bg').forEach(s=>drawSun(s));
+
+/* years / days */
+$('#yrNow').textContent=YEAR;
+$('#yearsInline').textContent=YEARS_SINCE;
+$('#yearsStat').dataset.count=YEARS_SINCE;
+(function(){
+  const d=new Date(Date.UTC(2000,5,11));d.setUTCFullYear(-322);
+  const days=Math.floor((Date.now()-d.getTime())/86400000);
+  const el=$('#daysCounter');
+  let started=false;
+  new IntersectionObserver(([e],o)=>{if(e.isIntersecting&&!started){started=true;animateNum(el,days,2200);o.disconnect()}},{threshold:.3}).observe(el);
+})();
+function animateNum(el,to,dur=1600){
+  if(REDUCE){el.textContent=fmt(to);return}
+  const t0=performance.now();
+  (function f(t){const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,4);el.textContent=fmt(to*e);if(k<1)requestAnimationFrame(f)})(t0);
+}
+$$('[data-count]').forEach(el=>setTimeout(()=>animateNum(el,+el.dataset.count,1800),400));
+
+/* ticker */
+(function(){
+  const items=['ΣΗΜΑ ΑΛΕΞΑΝΔΡΟΥ','BABILONIA · 323 A. C.','MENFIS · 321 A. C.','ALEJANDRÍA · 280 A. C.','SOMA · PTOLOMEO IV','CÉSAR · 48 A. C.','AUGUSTO · 30 A. C.','CARACALLA · 215 D. C.','VENECIA · 828 D. C.','SIWA · 1995','ANFÍPOLIS · 2014','CAUSA ABIERTA'];
+  const html=items.map(i=>`<span>${i}</span>`).join('');
+  $('#ticker').innerHTML=html+html;
+})();
+
+/* nav */
+const nav=$('#nav');
+$('#burger').addEventListener('click',()=>nav.classList.toggle('open'));
+$$('#menu a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+const totop=$('#totop');
+totop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+addEventListener('scroll',()=>{
+  const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;
+  nav.classList.toggle('scrolled',y>40);
+  $('#progress').style.width=(h?y/h*100:0)+'%';
+  totop.classList.toggle('show',y>900);
+},{passive:true});
+dispatchEvent(new Event('scroll'));
+/* scroll spy */
+(function(){
+  const links=$$('[data-spy]');const map={};links.forEach(l=>map[l.dataset.spy]=l);
+  const targets=Object.keys(map).map(id=>document.getElementById(id)).filter(Boolean);
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));map[e.target.id]&&map[e.target.id].classList.add('active')}})},{rootMargin:'-35% 0px -55% 0px'});
+  targets.forEach(t=>obs.observe(t));
+})();
+
+/* dust canvas */
+(function(){
+  const c=$('#dust');if(!c||REDUCE)return;
+  const ctx=c.getContext('2d');let w,h,parts=[],running=true;
+  function resize(){const dpr=Math.min(devicePixelRatio||1,2);w=c.clientWidth;h=c.clientHeight;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);make()}
+  function mk(init){return{x:Math.random()*w,y:init?Math.random()*h:h+10,r:Math.random()*1.5+.4,s:Math.random()*.3+.08,a:Math.random()*6.28,o:Math.random()*.5+.15,d:Math.random()*.8+.3,g:Math.random()<.2}}
+  function make(){parts=[];const n=Math.round(Math.min(170,w*h/9000));for(let i=0;i<n;i++)parts.push(mk(true))}
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of parts){
+      p.y-=p.s;p.a+=.01*p.d;p.x+=Math.sin(p.a)*.25;
+      if(p.y<-12||p.x<-12||p.x>w+12)Object.assign(p,mk(false));
+      if(p.g){ctx.fillStyle=`rgba(232,204,132,${p.o*.18})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r*4,0,6.283);ctx.fill()}
+      ctx.fillStyle=`rgba(232,204,132,${p.o})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fill();
+    }
+    if(running)requestAnimationFrame(tick);
+  }
+  resize();addEventListener('resize',resize);tick();
+  new IntersectionObserver(([e])=>{const was=running;running=e.isIntersecting;if(running&&!was)tick()}).observe(c);
+})();
+
+/* reveal */
+(function(){
+  $$('.stagger').forEach(s=>[...s.children].forEach((ch,i)=>ch.style.setProperty('--i',i%8)));
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.bar i[data-w]').forEach(b=>b.style.width=b.dataset.w+'%');obs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  window.observeReveal=el=>obs.observe(el);
+  $$('.reveal').forEach(el=>obs.observe(el));
+})();
+
+/* ====================== JOURNEY ====================== */
+(function(){
+  const path=$('#routePath'),fill=$('#routeFill'),marker=$('#marker');if(!path)return;
+  const L=path.getTotalLength();
+  const nodes={babylon:[560,250],damascus:[400,170],memphis:[300,420],alexandria:[215,300]};
+  const at={};
+  for(const k in nodes){let best=0,bd=1e12;for(let l=0;l<=L;l+=1.5){const p=path.getPointAtLength(l);const d=(p.x-nodes[k][0])**2+(p.y-nodes[k][1])**2;if(d<bd){bd=d;best=l}}at[k]=best}
+  at.alexandria=L;
+  fill.style.strokeDasharray=L;fill.style.strokeDashoffset=L;
+  let cur=0,target=0,raf=null;
+  function frame(){
+    cur+=(target-cur)*.07;
+    if(Math.abs(target-cur)<.4){cur=target;raf=null}
+    const p=path.getPointAtLength(cur);
+    marker.setAttribute('transform',`translate(${p.x.toFixed(2)},${p.y.toFixed(2)})`);
+    fill.style.strokeDashoffset=L-cur;
+    if(raf!==null)raf=requestAnimationFrame(frame);
+  }
+  function go(node){target=at[node]??0;if(raf===null)raf=requestAnimationFrame(frame)}
+  const steps=$$('.step'),yr=$('#routeYear'),loc=$('#routeLoc');
+  function activate(step){
+    steps.forEach(s=>s.classList.toggle('active',s===step));
+    $$('.node[data-n]').forEach(n=>n.classList.toggle('on',n.dataset.n===step.dataset.node));
+    yr.textContent=step.dataset.year;loc.textContent=step.dataset.loc;go(step.dataset.node);
+  }
+  activate(steps[0]);
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)activate(e.target)})},{rootMargin:'-38% 0px -52% 0px',threshold:0});
+  steps.forEach(s=>obs.observe(s));
+})();
+
+/* ====================== WITNESSES ====================== */
+(function(){
+  const box=$('#quotes');
+  box.innerHTML=QUOTES.map(q=>`<article class="quote"><div class="who"><div class="mono">${q.m}</div><div><b>${q.w}</b><span>${q.work}</span></div></div><blockquote>${q.q}</blockquote><div class="ctx"><span>${q.c}</span><span class="yr">${q.y}</span></div></article>`).join('');
+  const step=()=>(box.querySelector('.quote')?.getBoundingClientRect().width||400)+22;
+  $('#qPrev').onclick=()=>box.scrollBy({left:-step(),behavior:'smooth'});
+  $('#qNext').onclick=()=>box.scrollBy({left:step(),behavior:'smooth'});
+})();
+
+/* ====================== HYPOTHESES ====================== */
+const byId={};HYP.forEach(h=>byId[h.id]=h);
+(function(){
+  const box=$('#cards');
+  box.innerHTML=HYP.map(h=>`<div class="card reveal" role="button" tabindex="0" aria-label="Abrir expediente: ${h.title}" data-id="${h.id}" data-tag="${h.tag}">
+    <div class="top"><span class="idx">Versión ${h.n}</span><span class="badge ${h.badge}">${h.status}</span></div>
+    <h3>${h.title}</h3><div class="place">${h.place}</div><p>${h.summary}</p>
+    <div class="meter"><div class="row"><span>Índice de verosimilitud*</span><b>${h.score}%</b></div><div class="bar"><i data-w="${h.score}"></i></div></div>
+    <span class="more">Abrir expediente</span></div>`).join('');
+  $$('.card',box).forEach((c,i)=>{
+    c.style.setProperty('--i',i%6);observeReveal(c);
+    c.addEventListener('click',()=>openHyp(c.dataset.id));
+    c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openHyp(c.dataset.id)}});
+  });
+  $('#filters').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    $$('#filters button').forEach(x=>x.classList.toggle('on',x===b));
+    const f=b.dataset.f;
+    $$('.card',box).forEach(c=>c.classList.toggle('hide',!(f==='all'||c.dataset.tag===f)));
+  });
+})();
+
+/* modal */
+const modal=$('#modal'),mBody=$('#modalBody');
+function openHyp(id){
+  const h=byId[id];if(!h)return;
+  mBody.innerHTML=`<div class="top"><span class="idx" style="font-family:var(--caps);font-size:.66rem;letter-spacing:.3em;color:var(--muted)">Versión ${h.n}</span><span class="badge ${h.badge}">${h.status}</span></div>
+  <h3>${h.title}</h3><div class="place">${h.place}</div>
+  <div class="text">${h.details}</div>
+  <div class="procon"><div class="pro"><h4>Argumentos a favor</h4><ul>${h.pro.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="con"><h4>Argumentos en contra</h4><ul>${h.con.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>
+  <div class="meter"><div class="row"><span>Índice de verosimilitud*</span><b>${h.score}%</b></div><div class="bar"><i id="mBar"></i></div></div>
+  <div class="acts"><button class="btn solid" data-map="${h.id}"><span>Ver en el mapa</span></button><button class="btn ghost" data-close><span>Cerrar</span></button></div>`;
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const b=$('#mBar');if(b)b.style.width=h.score+'%'}));
+  $('.box',modal).scrollTop=0;
+}
+function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+modal.addEventListener('click',e=>{
+  if(e.target.closest('[data-close]'))closeModal();
+  const m=e.target.closest('[data-map]');
+  if(m){closeModal();document.getElementById('map').scrollIntoView({behavior:'smooth'});setTimeout(()=>flyTo(m.dataset.map),700)}
+});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openHyp(b.dataset.open)});
+
+/* ====================== MAP ====================== */
+let map=null,markers={},layers={};
+const ALL_PTS=[...ROUTE_PTS.map(p=>({...p,kind:'route'})),...HYP.map(h=>({id:h.id,title:h.title,sub:h.status,coords:h.coords,zoom:h.zoom,cls:h.tag==='rejected'?'rej':'',kind:'hyp',text:h.summary}))];
+(function buildList(){
+  const list=$('#mapList');
+  const item=p=>`<button data-pt="${p.id}"><span class="dot ${p.cls}"></span><span><b>${p.title}</b><small>${p.sub}</small></span></button>`;
+  list.innerHTML=`<h4>Ruta del cortejo</h4>${ROUTE_PTS.map(item).join('')}<h4>Candidatos a la tumba</h4>${HYP.map(h=>item(ALL_PTS.find(p=>p.id===h.id))).join('')}`;
+  list.addEventListener('click',e=>{const b=e.target.closest('[data-pt]');if(!b)return;$$('[data-pt]',list).forEach(x=>x.classList.toggle('on',x===b));flyTo(b.dataset.pt)});
+})();
+function flyTo(id){
+  const p=ALL_PTS.find(x=>x.id===id);if(!p)return;
+  $$('#mapList [data-pt]').forEach(x=>x.classList.toggle('on',x.dataset.pt===id));
+  if(!map){if(p.kind==='hyp')openHyp(id);return}
+  map.flyTo(p.coords,p.zoom,{duration:1.6});
+  setTimeout(()=>markers[id]&&markers[id].openPopup(),1650);
+}
+function initMap(){
+  const el=$('#mapCanvas');
+  if(typeof L==='undefined'){$('#mapFallback').style.display='grid';return}
+  try{
+    map=L.map(el,{zoomControl:true,scrollWheelZoom:false,worldCopyJump:true});
+    layers.dark=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap · © CARTO',subdomains:'abcd',maxZoom:19});
+    layers.sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Tiles © Esri',maxZoom:19});
+    layers.dark.addTo(map);
+    map.on('click',()=>map.scrollWheelZoom.enable());
+    const r=['r-babylon','r-damascus','r-memphis','r-alex'].map(id=>ROUTE_PTS.find(p=>p.id===id).coords);
+    L.polyline(r,{color:'#e8cc84',weight:2,dashArray:'6 8',opacity:.85}).addTo(map);
+    L.polyline([ROUTE_PTS[1].coords,ROUTE_PTS[4].coords],{color:'#948a76',weight:1.4,dashArray:'2 8',opacity:.7}).addTo(map).bindTooltip('Plan de Perdicas: hacia Egas',{className:'lbl',sticky:true});
+    L.polyline([ROUTE_PTS[2].coords,byId.siwa.coords],{color:'#948a76',weight:1.4,dashArray:'2 8',opacity:.7}).addTo(map).bindTooltip('Voluntad de Alejandro: hacia Siwa',{className:'lbl',sticky:true});
+    const icon=cls=>L.divIcon({className:'pin-wrap',html:`<div class="pin ${cls}"></div>`,iconSize:[14,14],iconAnchor:[7,7],popupAnchor:[0,-12]});
+    ALL_PTS.forEach(p=>{
+      const m=L.marker(p.coords,{icon:icon(p.cls)}).addTo(map);
+      m.bindPopup(`<div class="pop"><b>${p.title}</b><span>${p.sub}</span><p>${p.text}</p>${p.kind==='hyp'?`<button data-open="${p.id}">Abrir expediente</button>`:''}</div>`,{maxWidth:280});
+      m.bindTooltip(p.title,{className:'lbl',direction:'top',offset:[0,-10]});
+      markers[p.id]=m;
+    });
+    fitAll();
+    $$('.map-ctl button').forEach(b=>b.addEventListener('click',()=>{
+      if(b.dataset.layer){$$('.map-ctl [data-layer]').forEach(x=>x.classList.toggle('on',x===b));Object.values(layers).forEach(l=>map.removeLayer(l));layers[b.dataset.layer].addTo(map)}
+      if(b.dataset.fly==='alex')map.flyToBounds([[31.188,29.885],[31.215,29.93]],{duration:1.6,padding:[20,20]});
+      if(b.dataset.fly==='all')fitAll(true);
+    }));
+  }catch(err){console.warn(err);$('#mapFallback').style.display='grid'}
+}
+function fitAll(anim){const b=L.latLngBounds([[28,11],[46,45]]);anim?map.flyToBounds(b,{padding:[20,20],duration:1.6}):map.fitBounds(b,{padding:[20,20]})}
+new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){initMap();o.disconnect()}},{rootMargin:'400px'}).observe($('#map-section'));
+
+/* ====================== CHRONICLE ====================== */
+(function(){
+  $('#ledger').innerHTML=CHRON.map(c=>`<div class="row-l reveal${c.now?' now':''}"><div class="y">${c.y}${c.s?`<small>${c.s}</small>`:''}</div><div><h4>${c.t}</h4><p>${c.d}</p></div></div>`).join('');
+  $$('#ledger .row-l').forEach((r,i)=>{r.style.setProperty('--i',i%5);observeReveal(r)});
+})();
+
+/* ====================== POLL ====================== */
+(function(){
+  const KEY='alex-tomb-poll',VK='alex-tomb-vote',body=$('#pollBody');
+  const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{...POLL_SEED}}catch(e){return {...POLL_SEED}}};
+  const save=v=>{try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}};
+  const letters='ABCDEF';
+  function render(){
+    const mine=localStorage.getItem(VK);
+    if(!mine){
+      body.innerHTML=POLL.map((o,i)=>`<button class="opt" data-v="${o.id}"><span class="k">${letters[i]}</span><span>${o.t}</span></button>`).join('');
+      return;
+    }
+    const v=load(),total=Object.values(v).reduce((a,b)=>a+b,0)||1;
+    body.innerHTML=POLL.map((o,i)=>{const pct=Math.round(v[o.id]/total*100);return `<div class="opt res${o.id===mine?' mine':''}"><i class="fill" data-w="${pct}"></i><span class="k">${letters[i]}</span><span>${o.t}</span><span class="pct">${pct}%</span></div>`}).join('')+`<p style="font-size:.78rem;color:var(--muted);margin-top:8px">Votos totales: ${total}. Tu elección está resaltada en oro.</p><button class="small-link" id="revote">Volver a votar</button>`;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>$$('.fill',body).forEach(f=>f.style.width=f.dataset.w+'%')));
+  }
+  body.addEventListener('click',e=>{
+    const b=e.target.closest('[data-v]');
+    if(b){const v=load();v[b.dataset.v]=(v[b.dataset.v]||0)+1;save(v);localStorage.setItem(VK,b.dataset.v);render();return}
+    if(e.target.id==='revote'){const v=load(),m=localStorage.getItem(VK);if(m&&v[m]>0)v[m]--;save(v);localStorage.removeItem(VK);render()}
+  });
+  render();
+})();
+
+/* ====================== QUIZ ====================== */
+(function(){
+  const body=$('#quizBody');let i=0,score=0,locked=false;
+  const letters='ABCD';
+  function q(){
+    locked=false;const d=QUIZ[i];
+    body.innerHTML=`<div class="meta"><span>Pregunta ${i+1} / ${QUIZ.length}</span><span>Correctas: ${score}</span></div><div class="q">${d.q}</div>${d.o.map((o,k)=>`<button class="opt" data-k="${k}"><span class="k">${letters[k]}</span><span>${o}</span></button>`).join('')}<div class="expl" id="expl">${d.e}</div><div id="nextWrap"></div>`;
+  }
+  function result(){
+    const t=score===QUIZ.length?['Ptolomeo Sóter','Sabes del cuerpo más que los propios diádocos. Es hora de solicitar un permiso de excavación en Shallalat.']:score>=4?['Estrabón lo aprueba','Un conocimiento sólido de las fuentes. Solo falta encontrar el cruce de la Vía Canópica y la calle de la Soma.']:score>=2?['Guía alejandrino','Has captado el hilo general. Vuelve a leer los testimonios de los testigos: ahí están todas las respuestas.']:['Juan Crisóstomo','«¿Dónde está la tumba de Alejandro?»: tú tampoco lo sabes. Pero ahora tienes un motivo para releer el expediente desde el principio.'];
+    body.innerHTML=`<div class="result"><div class="big">${score}<span style="font-size:.4em;color:var(--muted)">/${QUIZ.length}</span></div><div class="t">${t[0]}</div><p>${t[1]}</p><button class="btn" id="again"><span>Volver a empezar</span></button></div>`;
+  }
+  body.addEventListener('click',e=>{
+    const b=e.target.closest('[data-k]');
+    if(b&&!locked){
+      locked=true;const d=QUIZ[i],k=+b.dataset.k;
+      $$('[data-k]',body).forEach(x=>{x.disabled=true;if(+x.dataset.k===d.a)x.classList.add('ok')});
+      if(k===d.a)score++;else b.classList.add('bad');
+      $('#expl').classList.add('show');
+      $('#nextWrap').innerHTML=`<button class="btn solid" id="next" style="margin-top:8px"><span>${i<QUIZ.length-1?'Siguiente pregunta':'Resultado'}</span></button>`;
+      return;
+    }
+    if(e.target.closest('#next')){i++;i<QUIZ.length?q():result();return}
+    if(e.target.closest('#again')){i=0;score=0;q()}
+  });
+  q();
+})();
+</script>
+</body>
+</html>
